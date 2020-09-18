@@ -34,6 +34,8 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
-    implementation 'de.robv.android.xposed:api:82'
+    //https://api.xposed.info/reference/de/robv/android/xposed/XposedHelpers.html
+    compileOnly 'de.robv.android.xposed:api:82'
+    compileOnly 'de.robv.android.xposed:api:82:sources'
 
 }

@@ -1,5 +1,8 @@
 package com.ml.xposedproject.tools
 
+import android.content.ContentValues
+import android.content.Context
+import com.ml.xposedproject.provider.ConfigContentProvider
 import com.tencent.mmkv.MMKV
 
 /**
@@ -11,12 +14,14 @@ import com.tencent.mmkv.MMKV
  * Project: XposedProject
  */
 object Config {
-    private val kv = MMKV.defaultMMKV()
-    fun getBool(key: String): Boolean {
-       return kv.decodeBool(key,false)
+    fun getBool(context: Context,key: String):Boolean{
+        val value = context.contentResolver.update(ConfigContentProvider.CONTENT_URI,ContentValues(),key,null)
+        return value==1
     }
-    fun setBool(key: String,boolean: Boolean){
-        kv.encode(key,boolean)
+    fun setBool(context: Context,key: String,boolean: Boolean){
+        val values =ContentValues()
+        values.put(key, boolean)
+        context.contentResolver.insert(ConfigContentProvider.CONTENT_URI,values)
     }
     object KEYS{
         const val ENABLE_XYJMH = "ENABLE_XYJMH"

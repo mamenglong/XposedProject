@@ -19,7 +19,7 @@ object HookFactory {
         hookList.add(HookDy())
     }
     fun doHook(loadPackageParam: XC_LoadPackage.LoadPackageParam){
-        log("doHook",this)
+        log("doHook hookList size :${hookList.size}",this)
         hookList.forEach {
             if (it.canHook(loadPackageParam))
                 it.doHook(loadPackageParam)

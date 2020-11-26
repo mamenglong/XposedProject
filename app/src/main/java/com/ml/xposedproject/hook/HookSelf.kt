@@ -1,9 +1,6 @@
 package com.ml.xposedproject.hook
 
-import com.ml.xposedproject.BuildConfig
-import com.ml.xposedproject.MainActivity
-import com.ml.xposedproject.log
-import com.ml.xposedproject.registerMethodReplaceHookCallback
+import com.ml.xposedproject.*
 import de.robv.android.xposed.XposedHelpers
 import de.robv.android.xposed.callbacks.XC_LoadPackage
 
@@ -15,29 +12,48 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage
  * Package: com.ml.xposedproject.hook
  * Project: XposedProject
  */
-class HookSelf:HookPackage {
+class HookSelf : HookPackage {
+    override fun enableHook(): Boolean {
+        return true
+    }
+
     override fun getPackage(): String {
-         return  BuildConfig.APPLICATION_ID
+        return BuildConfig.APPLICATION_ID
     }
 
-    override fun doHook(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
-        hookSelf(loadPackageParam)
-    }
-
-    private fun hookSelf(loadPackageParam: XC_LoadPackage.LoadPackageParam){
+    override fun hookPackage(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
+        log("hookPackage $loadPackageParam", this)
         kotlin.runCatching {
             XposedHelpers.findAndHookMethod(
                 MainActivity::class.java.name,
                 loadPackageParam.classLoader,
                 "getHook", registerMethodReplaceHookCallback {
-                    replaceHookedMethod{
-                        log("replaceHookedMethod $it",this@HookSelf)
-                        return@replaceHookedMethod "Hook succeed"
+                    replaceHookedMethod {
+                        log("${it?.method}",this@HookSelf)
+                        return@replaceHookedMethod "模块已启用"
                     }
                 })
-
+            XposedHelpers.findAndHookMethod(
+                MainActivity::class.java.name,
+                loadPackageParam.classLoader,
+                "isActive", registerMethodReplaceHookCallback {
+                    replaceHookedMethod {
+                        log("${it?.method}",this@HookSelf)
+                        return@replaceHookedMethod true
+                    }
+                })
+            XposedHelpers.findAndHookMethod(
+                MainActivity::class.java.name,
+                loadPackageParam.classLoader,
+                "onResume", registerMethodHookCallback {
+                    afterHookedMethod {
+                        log("${it?.method}",this@HookSelf)
+                        XposedHelpers.callMethod(it?.thisObject, "hookMe", "hahahh")
+                        it?.result  = null
+                    }
+                })
         }.onFailure {
-            log("getHook handleLoadPackage:${it.message}",this)
+            log("hookSelf onFailure:${it.message}", this)
         }
 
     }

@@ -11,7 +11,7 @@ import java.lang.reflect.Modifier
 class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
     @Throws(Throwable::class)
     override fun handleLoadPackage(loadPackageParam: LoadPackageParam) {
-        log("$modulePackageName handleLoadPackage", this)
+        log("handleLoadPackage ${loadPackageParam.packageName}", this)
         HookFactory.doHook(loadPackageParam)
     }
 

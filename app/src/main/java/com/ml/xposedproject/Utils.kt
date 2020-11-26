@@ -1,5 +1,6 @@
 package com.ml.xposedproject
 
+import android.util.Log
 import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XC_MethodReplacement
 import de.robv.android.xposed.XposedBridge
@@ -14,4 +15,5 @@ import de.robv.android.xposed.XposedBridge
  */
 fun log(msg: String, clazz: Any? = null){
     XposedBridge.log("${clazz?.javaClass?.simpleName ?: "menglong"}->$msg")
+    Log.d(clazz?.javaClass?.simpleName ?: "menglong",msg)
 }

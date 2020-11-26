@@ -18,25 +18,32 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         viewBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
-        viewBinding.tvHookResult.text = getHook()
+         initHookView()
     }
-
+   private fun initHookView(){
+       viewBinding.tvHookResult.text = getHook()
+       viewBinding.tvHookResult.isChecked = isActive()
+   }
     override fun onResume() {
         super.onResume()
         initView()
     }
     private fun initView() {
-        viewBinding.swOpenDy.isChecked = Config.getBool(Config.KEYS.ENABLE_DY)
-        viewBinding.swOpenXyjmh.isChecked = Config.getBool(Config.KEYS.ENABLE_XYJMH)
+        viewBinding.swOpenDy.isChecked = Config.getBool(this,Config.KEYS.ENABLE_DY)
+        viewBinding.swOpenXyjmh.isChecked = Config.getBool(this,Config.KEYS.ENABLE_XYJMH)
         viewBinding.swOpenXyjmh.setOnCheckedChangeListener { buttonView, isChecked ->
-            Config.setBool(Config.KEYS.ENABLE_XYJMH,isChecked)
+            Config.setBool(this,Config.KEYS.ENABLE_XYJMH,isChecked)
         }
         viewBinding.swOpenDy.setOnCheckedChangeListener { buttonView, isChecked ->
-            Config.setBool(Config.KEYS.ENABLE_DY,isChecked)
+            Config.setBool(this,Config.KEYS.ENABLE_DY,isChecked)
         }
     }
 
     private fun getHook():String{
          return "未hook"
+    }
+    private fun isActive():Boolean = false
+    private fun hookMe(msg:String){
+        Toast.makeText(this,msg,Toast.LENGTH_SHORT).show()
     }
 }

@@ -1,5 +1,6 @@
 package com.ml.xposedproject.hook
 
+import android.app.AndroidAppHelper
 import com.ml.xposedproject.log
 import com.ml.xposedproject.registerMethodReplaceHookCallback
 import com.ml.xposedproject.tools.Config
@@ -15,27 +16,24 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage
  * Project: XposedProject
  */
 class HookDy:HookPackage {
-    override fun canHook(loadPackageParam: XC_LoadPackage.LoadPackageParam): Boolean {
-        val enable = Config.getBool(Config.KEYS.ENABLE_DY)
-        return enable && super.canHook(loadPackageParam)
+    override fun enableHook(): Boolean {
+        log("enableHook context:${AndroidAppHelper.currentPackageName()}  context:${context?.packageName}",this)
+        val enable = context?.let { Config.getBool(it,Config.KEYS.ENABLE_DY) }?:false
+        log("enableHook enable:$enable",this)
+        return enable
     }
+
     override fun getPackage(): String {
         return "com.wechat.yajiji1123"
     }
-
-    override fun doHook(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
-        hookDY(loadPackageParam)
-    }
-    /**
-     * com.wechat.yajiji1123
-     */
-    private fun hookDY(loadPackageParam: XC_LoadPackage.LoadPackageParam){
+    override fun hookPackage(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
+        log("hookPackage",this)
         kotlin.runCatching {
             XposedHelpers.findAndHookMethod("com.niming.weipa.model.UserInfo2",
                 loadPackageParam.classLoader,"getIs_vip", registerMethodReplaceHookCallback {
                     replaceHookedMethod{
                         log("hookDY getIs_vip replaceHookedMethod ",this@HookDy)
-                        return@replaceHookedMethod true
+                        return@replaceHookedMethod "y"
                     }
                 })
 

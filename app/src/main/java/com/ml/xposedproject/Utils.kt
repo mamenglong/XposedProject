@@ -1,6 +1,8 @@
 package com.ml.xposedproject
 
+import android.app.AndroidAppHelper
 import android.util.Log
+import android.widget.Toast
 import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XC_MethodReplacement
 import de.robv.android.xposed.XposedBridge
@@ -15,5 +17,9 @@ import de.robv.android.xposed.XposedBridge
  */
 fun log(msg: String, clazz: Any? = null){
     XposedBridge.log("${clazz?.javaClass?.simpleName ?: "menglong"}->$msg")
-    Log.d(clazz?.javaClass?.simpleName ?: "menglong",msg)
+   // Log.d(clazz?.javaClass?.simpleName ?: "menglong",msg)
+}
+
+fun showToast(msg: String){
+    Toast.makeText(AndroidAppHelper.currentApplication(),msg,Toast.LENGTH_SHORT).show()
 }

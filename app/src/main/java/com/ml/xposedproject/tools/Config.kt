@@ -26,5 +26,7 @@ object Config {
     object KEYS{
         const val ENABLE_XYJMH = "ENABLE_XYJMH"
         const val ENABLE_DY = "ENABLE_DY"
+        const val ENABLE_HX = "ENABLE_HX"
+        const val ENABLE_FTQ = "ENABLE_FTQ"
     }
 }

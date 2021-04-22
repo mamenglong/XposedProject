@@ -2,12 +2,13 @@ package com.ml.xposedproject.hook
 
 import android.app.Activity
 import android.app.AndroidAppHelper
-import android.widget.Toast
+import android.view.View
 import com.ml.xposedproject.log
 import com.ml.xposedproject.registerMethodHookCallback
 import com.ml.xposedproject.registerMethodReplaceHookCallback
 import com.ml.xposedproject.showToast
 import com.ml.xposedproject.tools.Config
+import de.robv.android.xposed.XC_MethodReplacement
 import de.robv.android.xposed.XposedHelpers
 import de.robv.android.xposed.callbacks.XC_LoadPackage
 
@@ -38,6 +39,7 @@ class HookDy : HookPackage {
         log("hookPackage", this)
         hookUserInfo(loadPackageParam)
         removeAd(loadPackageParam)
+        hookVideoDetail(loadPackageParam)
         kotlin.runCatching {
             XposedHelpers.findAndHookMethod("com.niming.weipa.model.VideoDetails.AuthError",
                 loadPackageParam.classLoader, "getInfo", registerMethodHookCallback {
@@ -53,16 +55,41 @@ class HookDy : HookPackage {
         }
     }
 
-    private fun hookUserInfo(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
-        fun hookMethod(methodName: String, newValue: Any) {
-            XposedHelpers.findAndHookMethod("com.niming.weipa.model.UserInfo2",
-                loadPackageParam.classLoader, methodName, registerMethodReplaceHookCallback {
-                    replaceHookedMethod {
-                        log(methodName, this@HookDy)
-                        return@replaceHookedMethod newValue
+    private fun hookVideoDetail(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
+        fun hookVideoMethod(methodName: String,newValue: Any?){
+            hookAndReplaceMethodPrintOrigin(loadPackageParam,"com.niming.weipa.model.VideoInfo2",methodName, newValue)
+        }
+        kotlin.runCatching {
+            val list = mutableListOf<Pair<kotlin.String, kotlin.Any?>>()
+            list.apply {
+                add("getCoins" to 4)
+                add("getIs_free" to 1)
+                add("getTitle" to "视频描述")
+                add("getDuration" to 5*60*1000)
+            }
+            list.forEach {
+                hookVideoMethod(it.first, it.second)
+            }
+            hookAndReplaceMethodPrintOrigin(loadPackageParam,"com.niming.weipa.model.VideoDetails.AuthError","getKey", 1002)
+            hookAndReplaceMethodPrintOrigin(loadPackageParam,"com.niming.framework.net.Result","isOk", true)
+            hookAndReplaceMethodPrintOrigin(loadPackageParam,"com.shuyu.gsyvideoplayer.video.base.GSYVideoView","getDuration", 5*60*1000)
+            XposedHelpers.findAndHookMethod("com.niming.weipa.model.VideoPlayTimeModel",
+                loadPackageParam.classLoader, "setTime", String::class.java,registerMethodHookCallback {
+                    afterHookedMethod {
+                        log("setTime:${it?.args?.get(0)} ", this@HookDy)
                     }
                 })
+            XposedHelpers.findAndHookMethod("com.shuyu.gsyvideoplayer.video.base.GSYVideoControlView.b",
+                loadPackageParam.classLoader, "run", String::class.java,XC_MethodReplacement.DO_NOTHING)
 
+        }.onFailure {
+            log("onFailure hookVideoDetail:${it}", this)
+        }
+    }
+
+    private fun hookUserInfo(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
+        fun hookUserInfoMethod(methodName: String, newValue: Any) {
+            hookAndReplaceMethodPrintOrigin(loadPackageParam,"com.niming.weipa.model.UserInfo2",methodName, newValue)
         }
         kotlin.runCatching {
             val list = mutableListOf<Pair<kotlin.String, kotlin.Any>>()
@@ -71,18 +98,18 @@ class HookDy : HookPackage {
                 add("getNick" to "小可爱")
                 add("getCoins" to 300)
                 add("getRank_type" to 9)
-                add("video_long_count" to 10)
-                add("video_short_count" to 10)
-                add("vip_expired" to "2020-11-27 22:22:22")
-                add("vip_expired_text" to "2020-11-27 22:22:22")
-                add("vip_text" to "超级至尊")
-                add("buy_floor_count" to 100)
-                add("buy_image_count" to 100)
-                add("buy_long_count" to 100)
-                add("buy_short_count" to 100)
+                add("getVideo_long_count" to 10)
+                add("getVideo_short_count" to 10)
+                add("getVip_expired" to "2020-11-27 22:22:22")
+                add("getVip_expired_text" to "2020-11-27 22:22:22")
+                add("getVip_text" to "超级至尊")
+                add("getBuy_floor_count" to 100)
+                add("getBuy_image_count" to 100)
+                add("getBuy_short_count" to 100)
+                add("getBuy_long_count" to 100)
             }
             list.forEach {
-                hookMethod(it.first, it.second)
+                hookUserInfoMethod(it.first, it.second)
             }
         }.onFailure {
             log("onFailure hookUserInfo:${it}", this)
@@ -113,7 +140,7 @@ class HookDy : HookPackage {
                 loadPackageParam.classLoader, "onCreate", registerMethodHookCallback {
                     afterHookedMethod {
                         log("App onCreate ", this@HookDy)
-                        showToast("App onCreate")
+                        showToast("App onCreate1")
                     }
                 })
 
@@ -133,4 +160,5 @@ class HookDy : HookPackage {
             log("onFailure SplashAdActivity onResume :${it}", this)
         }
     }
-}
+
+ }

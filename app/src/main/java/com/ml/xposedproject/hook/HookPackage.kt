@@ -5,6 +5,7 @@ import android.content.Context
 import android.widget.Toast
 import com.ml.xposedproject.log
 import com.ml.xposedproject.registerMethodHookCallback
+import com.ml.xposedproject.registerMethodReplaceHookCallback
 import com.ml.xposedproject.tools.Config
 import de.robv.android.xposed.XposedHelpers
 import de.robv.android.xposed.callbacks.XC_LoadPackage
@@ -42,7 +43,7 @@ interface HookPackage {
                         if (enableHook())
                             hookPackage(loadPackageParam)
 
-                        Toast.makeText(app,"hook onCreate ",Toast.LENGTH_SHORT).show()
+                        Toast.makeText(app,"hook onCreate:${loadPackageParam.packageName} ",Toast.LENGTH_SHORT).show()
                     }
                 })
 
@@ -51,4 +52,28 @@ interface HookPackage {
         }
 
     }
+
+
+    fun hookAndReplaceMethod(loadPackageParam: XC_LoadPackage.LoadPackageParam, className:String, methodName: String, newValue: Any?){
+        XposedHelpers.findAndHookMethod(className,
+            loadPackageParam.classLoader, methodName, registerMethodReplaceHookCallback {
+                replaceHookedMethod {
+                    log(methodName, this@HookPackage)
+                    return@replaceHookedMethod newValue
+                }
+            })
+    }
+    fun hookAndReplaceMethodPrintOrigin(loadPackageParam: XC_LoadPackage.LoadPackageParam,className:String,methodName: String, newValue: Any?){
+        XposedHelpers.findAndHookMethod(className,
+            loadPackageParam.classLoader, methodName, registerMethodHookCallback {
+                afterHookedMethod {
+                    log("$methodName old:${it?.result} ", this@HookPackage)
+                    newValue?.let { value->
+                        it?.result = value
+                        log("$methodName new:${it?.result} ", this@HookPackage)
+                    }
+                }
+            })
+    }
+
 }

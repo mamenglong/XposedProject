@@ -1,6 +1,7 @@
 package com.ml.xposedproject.hook
 
 import android.app.AndroidAppHelper
+import android.content.Context
 import com.ml.xposedproject.log
 import com.ml.xposedproject.registerMethodHookCallback
 import com.ml.xposedproject.registerMethodReplaceHookCallback
@@ -28,31 +29,62 @@ class HookFTQ : HookPackage {
         return enable
     }
     override fun hookPackage(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
-        log("hookPackage $loadPackageParam", this)
+        log("hookPackage :${loadPackageParam.packageName}", this)
         kotlin.runCatching {
-            XposedHelpers.findAndHookMethod("com.maibaapp.module.main.bean.user.NewElfUserInfoDetailBean",
-                loadPackageParam.classLoader, "isVip", registerMethodHookCallback {
-                    afterHookedMethod {
-                        log("hookXYJMH isVip afterHookedMethod origin value:${it?.result}", this@HookFTQ)
-                        it?.result = true
-                        log("hookXYJMH isVip afterHookedMethod  new   value:${it?.result}", this@HookFTQ)
+            XposedHelpers.findAndHookMethod("com.vpn.code.g.f",
+                loadPackageParam.classLoader, "a", Context::class.java,String::class.java, registerMethodReplaceHookCallback {
+                    replaceHookedMethod{
+                        log("hookFTQ 启动检测  replaceHookedMethod argument2:${it?.args?.get(1)}", this@HookFTQ)
+                        return@replaceHookedMethod false
                     }
                 })
 
         }.onFailure {
-            log("isVip handleLoadPackage:${it.message}", this)
+            log("hookFTQ 启动检测 onFailure handleLoadPackage:${it}", this)
+        }
+        hookUserInfo(loadPackageParam)
+    }
+    private fun hookUserInfo(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
+        fun hookUserInfoMethod(methodName: String, newValue: Any) {
+            hookAndReplaceMethodPrintOrigin(loadPackageParam,"com.vpn.code.bean.UserExpirationReply",methodName, newValue)
         }
         kotlin.runCatching {
-            XposedHelpers.findAndHookMethod("com.maibaapp.module.main.bean.user.NewElfUserInfoDetailBean",
-                loadPackageParam.classLoader, "getWx_openid", registerMethodReplaceHookCallback {
-                    replaceHookedMethod {
-                        log("hookXYJMH getWx_openid  replaceHookedMethod ", this@HookFTQ)
-                        return@replaceHookedMethod "true"
-                    }
-                })
-
+            val list = mutableListOf<Pair<kotlin.String, kotlin.Any>>()
+            list.apply {
+                add("getEexpire_at" to System.currentTimeMillis()+10000)
+                add("isIs_enabled" to true)
+                add("getUserExpiration" to 0)
+                add("isIs_vip" to true)
+                add("isVip_user_view" to true)
+                add("getEexpire_type" to 1)
+            }
+            list.forEach {
+                hookUserInfoMethod(it.first, it.second)
+            }
         }.onFailure {
-            log("getWx_openid handleLoadPackage :${it.message}", this)
+            log("onFailure hookUserInfo:${it}", this)
         }
     }
+    private fun hookAndbackend(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
+        fun hookUserInfoMethod(methodName: String, newValue: Any) {
+            hookAndReplaceMethodPrintOrigin(loadPackageParam,"andbackend",methodName, newValue)
+        }
+        kotlin.runCatching {
+            val list = mutableListOf<Pair<kotlin.String, kotlin.Any>>()
+            list.apply {
+               // add("getUserBindStatus" to System.currentTimeMillis()+10000)
+                add("getUserBindStatus" to true)
+                add("getUserExpiration" to 0)
+                add("getUserPro" to true)
+                add("isPro" to 1)
+                add("isUserMarkDanger" to false)
+            }
+            list.forEach {
+                hookUserInfoMethod(it.first, it.second)
+            }
+        }.onFailure {
+            log("onFailure hookUserInfo:${it}", this)
+        }
+    }
+
 }

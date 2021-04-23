@@ -27,10 +27,24 @@ android {
     viewBinding {
         enabled = true
     }
+    signingConfigs {
+        release {
+            storeFile file('../keystore.keystore')
+            storePassword 'menglong'
+            keyAlias 'key0'
+            keyPassword 'menglong'
+            v1SigningEnabled true
+            v2SigningEnabled true
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            signingConfig signingConfigs.release
         }
     }
 }

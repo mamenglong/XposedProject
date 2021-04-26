@@ -7,6 +7,7 @@ import com.ml.xposedproject.log
 import com.ml.xposedproject.registerMethodHookCallback
 import com.ml.xposedproject.registerMethodReplaceHookCallback
 import com.ml.xposedproject.tools.Config
+import de.robv.android.xposed.XposedBridge
 import de.robv.android.xposed.XposedHelpers
 import de.robv.android.xposed.callbacks.XC_LoadPackage
 
@@ -58,7 +59,7 @@ interface HookPackage {
         XposedHelpers.findAndHookMethod(className,
             loadPackageParam.classLoader, methodName, registerMethodReplaceHookCallback {
                 replaceHookedMethod {
-                    log(methodName, this@HookPackage)
+                    log("replace->$className.$methodName", this@HookPackage)
                     return@replaceHookedMethod newValue
                 }
             })
@@ -67,13 +68,26 @@ interface HookPackage {
         XposedHelpers.findAndHookMethod(className,
             loadPackageParam.classLoader, methodName, registerMethodHookCallback {
                 afterHookedMethod {
-                    log("$methodName old:${it?.result} ", this@HookPackage)
+                    log("$className.$methodName old:${it?.result} ", this@HookPackage)
                     newValue?.let { value->
                         it?.result = value
-                        log("$methodName new:${it?.result} ", this@HookPackage)
+                        log("$className.$methodName new:${it?.result} ", this@HookPackage)
                     }
                 }
             })
     }
 
+    fun hookMethodPrint(loadPackageParam: XC_LoadPackage.LoadPackageParam,className:String,methodName: String,vararg params:Class<*>){
+
+        XposedHelpers.findAndHookMethod(className,
+            loadPackageParam.classLoader, methodName,params, registerMethodHookCallback {
+                afterHookedMethod{
+                    var oldParam = ""
+                    params.forEach {p->
+                        oldParam+=" ${it?.args?.get(0)} "
+                    }
+                    log("$className.$methodName params :${oldParam} ", this@HookPackage)
+                }
+            })
+    }
 }

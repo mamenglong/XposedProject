@@ -43,6 +43,8 @@ class HookFTQ : HookPackage {
             log("hookFTQ 启动检测 onFailure handleLoadPackage:${it}", this)
         }
         hookUserInfo(loadPackageParam)
+        hookAndbackend(loadPackageParam)
+        hookDialog(loadPackageParam)
     }
     private fun hookUserInfo(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
         fun hookUserInfoMethod(methodName: String, newValue: Any) {
@@ -51,12 +53,14 @@ class HookFTQ : HookPackage {
         kotlin.runCatching {
             val list = mutableListOf<Pair<kotlin.String, kotlin.Any>>()
             list.apply {
-                add("getEexpire_at" to System.currentTimeMillis()+10000)
+                add("getEexpire_at" to (System.currentTimeMillis()+10000)/1000)
                 add("isIs_enabled" to true)
-                add("getUserExpiration" to 0)
+                add("getUserExpiration" to 86400 * 2)
+                add("getEexpiration" to 1000)
                 add("isIs_vip" to true)
                 add("isVip_user_view" to true)
-                add("getEexpire_type" to 1)
+                add("getEexpire_type" to 2)
+                add("getUserFlows" to 1024)
             }
             list.forEach {
                 hookUserInfoMethod(it.first, it.second)
@@ -73,15 +77,48 @@ class HookFTQ : HookPackage {
             val list = mutableListOf<Pair<kotlin.String, kotlin.Any>>()
             list.apply {
                // add("getUserBindStatus" to System.currentTimeMillis()+10000)
-                add("getUserBindStatus" to true)
-                add("getUserExpiration" to 0)
+                add("getUserBindStatus" to 1)
+                add("getUserExpiration" to 1000)
                 add("getUserPro" to true)
                 add("isPro" to 1)
                 add("isUserMarkDanger" to false)
+                add("isLocalTimeCorrect" to true)
             }
             list.forEach {
                 hookUserInfoMethod(it.first, it.second)
             }
+        }.onFailure {
+            log("onFailure hookUserInfo:${it}", this)
+        }
+    }
+    private fun hookDialog(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
+        /**
+         * 绑定弹窗 BindingDialog
+         */
+        hookAndReplaceMethod(loadPackageParam,"com.vpn.code.activity.MainActivity","s2",Unit)
+        /**
+         * 公告弹窗 BulletinsDialog
+         */
+        hookAndReplaceMethod(loadPackageParam,"com.vpn.code.activity.MainActivity","t2",Unit)
+
+
+
+        fun hookUserInfoMethod(methodName: String, newValue: Any) {
+            hookAndReplaceMethodPrintOrigin(loadPackageParam,"com.vpn.code.activity.MainActivity",methodName, newValue)
+        }
+        kotlin.runCatching {
+            val list = mutableListOf<Pair<kotlin.String, kotlin.Any>>()
+            list.apply {
+                
+            }
+            list.forEach {
+                hookUserInfoMethod(it.first, it.second)
+            }
+            /**
+             * hook LogUtil
+             */
+            hookMethodPrint(loadPackageParam,"com.vpn.code.g.h","a",String::class.java)
+            hookMethodPrint(loadPackageParam,"com.vpn.code.g.h","c",String::class.java)
         }.onFailure {
             log("onFailure hookUserInfo:${it}", this)
         }

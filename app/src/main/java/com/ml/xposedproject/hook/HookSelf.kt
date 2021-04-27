@@ -1,6 +1,7 @@
 package com.ml.xposedproject.hook
 
 import com.ml.xposedproject.*
+import com.ml.xposedproject.test.TestObject
 import de.robv.android.xposed.XposedHelpers
 import de.robv.android.xposed.callbacks.XC_LoadPackage
 
@@ -22,7 +23,7 @@ class HookSelf : HookPackage {
     }
 
     override fun hookPackage(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
-        log("hookPackage $loadPackageParam", this)
+        log("hookPackage ${loadPackageParam.packageName}", this)
         kotlin.runCatching {
             XposedHelpers.findAndHookMethod(
                 MainActivity::class.java.name,
@@ -52,6 +53,8 @@ class HookSelf : HookPackage {
                         it?.result  = null
                     }
                 })
+
+            hookStaticMethodPrint(loadPackageParam,TestObject::class.java.name,"testHook",String::class.java)
         }.onFailure {
             log("hookSelf onFailure:${it.message}", this)
         }

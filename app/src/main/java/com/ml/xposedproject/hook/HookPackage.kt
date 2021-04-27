@@ -2,14 +2,15 @@ package com.ml.xposedproject.hook
 
 import android.app.AndroidAppHelper
 import android.content.Context
+import android.os.Build
 import android.widget.Toast
 import com.ml.xposedproject.log
 import com.ml.xposedproject.registerMethodHookCallback
 import com.ml.xposedproject.registerMethodReplaceHookCallback
-import com.ml.xposedproject.tools.Config
 import de.robv.android.xposed.XposedBridge
 import de.robv.android.xposed.XposedHelpers
 import de.robv.android.xposed.callbacks.XC_LoadPackage
+import kotlinx.coroutines.flow.asFlow
 
 /**
  * Author: Menglong Ma
@@ -20,22 +21,25 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage
  * Project: XposedProject
  */
 interface HookPackage {
-    val context:Context?
-    get() = AndroidAppHelper.currentApplication()
-    fun canHook(loadPackageParam: XC_LoadPackage.LoadPackageParam):Boolean{
+    val context: Context?
+        get() = AndroidAppHelper.currentApplication()
+
+    fun canHook(loadPackageParam: XC_LoadPackage.LoadPackageParam): Boolean {
         return loadPackageParam.packageName == getPackage()
     }
-    fun enableHook():Boolean
-    fun getPackage():String
-    fun doHook(loadPackageParam: XC_LoadPackage.LoadPackageParam){
+
+    fun enableHook(): Boolean
+    fun getPackage(): String
+    fun doHook(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
         hookApplication(loadPackageParam)
     }
+
     fun hookPackage(loadPackageParam: XC_LoadPackage.LoadPackageParam)
 
     /**
-     * 
+     *
      */
-    fun hookApplication(loadPackageParam: XC_LoadPackage.LoadPackageParam){
+    fun hookApplication(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
         kotlin.runCatching {
             XposedHelpers.findAndHookMethod("android.app.Application",
                 loadPackageParam.classLoader, "onCreate", registerMethodHookCallback {
@@ -44,7 +48,11 @@ interface HookPackage {
                         if (enableHook())
                             hookPackage(loadPackageParam)
 
-                        Toast.makeText(app,"hook onCreate:${loadPackageParam.packageName} ",Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            app,
+                            "hook onCreate:${loadPackageParam.packageName} ",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 })
 
@@ -55,7 +63,12 @@ interface HookPackage {
     }
 
 
-    fun hookAndReplaceMethod(loadPackageParam: XC_LoadPackage.LoadPackageParam, className:String, methodName: String, newValue: Any?){
+    fun hookAndReplaceMethod(
+        loadPackageParam: XC_LoadPackage.LoadPackageParam,
+        className: String,
+        methodName: String,
+        newValue: Any?
+    ) {
         XposedHelpers.findAndHookMethod(className,
             loadPackageParam.classLoader, methodName, registerMethodReplaceHookCallback {
                 replaceHookedMethod {
@@ -64,12 +77,18 @@ interface HookPackage {
                 }
             })
     }
-    fun hookAndReplaceMethodPrintOrigin(loadPackageParam: XC_LoadPackage.LoadPackageParam,className:String,methodName: String, newValue: Any?){
+
+    fun hookAndReplaceMethodPrintOrigin(
+        loadPackageParam: XC_LoadPackage.LoadPackageParam,
+        className: String,
+        methodName: String,
+        newValue: Any?
+    ) {
         XposedHelpers.findAndHookMethod(className,
             loadPackageParam.classLoader, methodName, registerMethodHookCallback {
                 afterHookedMethod {
                     log("$className.$methodName old:${it?.result} ", this@HookPackage)
-                    newValue?.let { value->
+                    newValue?.let { value ->
                         it?.result = value
                         log("$className.$methodName new:${it?.result} ", this@HookPackage)
                     }
@@ -77,17 +96,39 @@ interface HookPackage {
             })
     }
 
-    fun hookMethodPrint(loadPackageParam: XC_LoadPackage.LoadPackageParam,className:String,methodName: String,vararg params:Class<*>){
-
-        XposedHelpers.findAndHookMethod(className,
-            loadPackageParam.classLoader, methodName,params, registerMethodHookCallback {
-                afterHookedMethod{
+    fun hookStaticMethodPrint(
+        loadPackageParam: XC_LoadPackage.LoadPackageParam,
+        className: String,
+        methodName: String,
+        vararg params: Any
+    ) {
+        val p = params.joinToString {
+            when(it){
+                is String -> it
+                is Class<*> -> it.name
+                else -> "$it"
+            }
+        }
+        log("hookStaticMethodPrint params :${p} ", this@HookPackage)
+        kotlin.runCatching {
+            val m = XposedHelpers.findMethodExact(
+                className,
+                loadPackageParam.classLoader, methodName, *params
+            )
+            XposedBridge.hookMethod(m,registerMethodHookCallback {
+                afterHookedMethod {
                     var oldParam = ""
-                    params.forEach {p->
-                        oldParam+=" ${it?.args?.get(0)} "
+                    params.forEach { p ->
+                        oldParam += " ${it?.args?.get(0)} "
                     }
-                    log("$className.$methodName params :${oldParam} ", this@HookPackage)
+                    log("hookStaticMethodPrint $className.$methodName params :${oldParam} ", this@HookPackage)
                 }
             })
+            log("hookStaticMethodPrint onSuccess $className.$methodName ->:${m.name}", this@HookPackage)
+        }.onFailure {
+            log("hookStaticMethodPrint onFailure $className.$methodName ->:${it.message}", this@HookPackage)
+        }
+
+
     }
 }

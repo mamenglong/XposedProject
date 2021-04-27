@@ -3,7 +3,6 @@ package com.ml.xposedproject.hook
 import android.app.AndroidAppHelper
 import android.content.Context
 import com.ml.xposedproject.log
-import com.ml.xposedproject.registerMethodHookCallback
 import com.ml.xposedproject.registerMethodReplaceHookCallback
 import com.ml.xposedproject.tools.Config
 import de.robv.android.xposed.XposedHelpers
@@ -117,8 +116,8 @@ class HookFTQ : HookPackage {
             /**
              * hook LogUtil
              */
-            hookMethodPrint(loadPackageParam,"com.vpn.code.g.h","a",String::class.java)
-            hookMethodPrint(loadPackageParam,"com.vpn.code.g.h","c",String::class.java)
+            hookStaticMethodPrint(loadPackageParam,"com.vpn.code.g.h","a",String::class.java.name)
+            hookStaticMethodPrint(loadPackageParam,"com.vpn.code.g.h","c",String::class.java.name)
         }.onFailure {
             log("onFailure hookUserInfo:${it}", this)
         }

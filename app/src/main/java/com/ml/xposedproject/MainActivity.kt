@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.ml.xposedproject.databinding.ActivityMainBinding
 import com.ml.xposedproject.databinding.ItemHookListBinding
+import com.ml.xposedproject.hook.HookPackage
+import com.ml.xposedproject.test.TestObject
 import com.ml.xposedproject.tools.Config
 import dalvik.system.DexClassLoader
 import dalvik.system.PathClassLoader
@@ -47,6 +49,9 @@ class MainActivity : AppCompatActivity() {
         viewBinding.tvHookResult.text = getHook()
         viewBinding.tvHookResult.isChecked = isActive()
         initView()
+        viewBinding.btnTest.setOnClickListener {
+            TestObject.testHook("${System.currentTimeMillis()}")
+        }
     }
 
     override fun onResume() {

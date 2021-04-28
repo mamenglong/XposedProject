@@ -54,7 +54,7 @@ class HookSelf : HookPackage {
                     }
                 })
 
-            hookStaticMethodPrint(loadPackageParam,TestObject::class.java.name,"testHook",String::class.java)
+            hookMethodAndPrintParams(loadPackageParam,TestObject::class.java.name,"testHook",String::class.java)
         }.onFailure {
             log("hookSelf onFailure:${it.message}", this)
         }

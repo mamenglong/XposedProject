@@ -1,15 +1,10 @@
 package com.ml.xposedproject.hook
 
-import android.app.Activity
 import android.app.AndroidAppHelper
-import android.view.View
 import android.widget.Toast
 import com.ml.xposedproject.log
 import com.ml.xposedproject.registerMethodHookCallback
-import com.ml.xposedproject.registerMethodReplaceHookCallback
-import com.ml.xposedproject.showToast
 import com.ml.xposedproject.tools.Config
-import de.robv.android.xposed.XC_MethodReplacement
 import de.robv.android.xposed.XposedHelpers
 import de.robv.android.xposed.callbacks.XC_LoadPackage
 
@@ -48,7 +43,7 @@ class HookHX : HookPackage {
     }
     private fun hookUserInfo(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
         fun hookUserInfoMethod(methodName: String, newValue: Any) {
-            hookAndReplaceMethodPrintOrigin(loadPackageParam,"com.bepskq.hxgohq.model.remote.User",methodName, newValue)
+            hookAndReplaceMethodAndPrintResult(loadPackageParam,"com.bepskq.hxgohq.model.remote.User",methodName, newValue)
         }
         kotlin.runCatching {
             val list = mutableListOf<Pair<kotlin.String, kotlin.Any>>()
@@ -70,7 +65,7 @@ class HookHX : HookPackage {
     }
     private fun hookVideoInfo(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
         fun hookUserInfoMethod(methodName: String, newValue: Any) {
-            hookAndReplaceMethodPrintOrigin(loadPackageParam,"com.bepskq.hxgohq.model.remote.VideoInfo",methodName, newValue)
+            hookAndReplaceMethodAndPrintResult(loadPackageParam,"com.bepskq.hxgohq.model.remote.VideoInfo",methodName, newValue)
         }
         kotlin.runCatching {
             val list = mutableListOf<Pair<kotlin.String, kotlin.Any>>()
@@ -87,7 +82,7 @@ class HookHX : HookPackage {
     }
     private fun hookBannerInfo(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
         fun hookUserInfoMethod(methodName: String, newValue: Any) {
-            hookAndReplaceMethodPrintOrigin(loadPackageParam,
+            hookAndReplaceMethodAndPrintResult(loadPackageParam,
                 "com.bepskq.hxgohq.model.remote.Banner",methodName, newValue)
         }
         kotlin.runCatching {
@@ -105,7 +100,7 @@ class HookHX : HookPackage {
 
     private fun hookPlayer(loadPackageParam: XC_LoadPackage.LoadPackageParam){
         fun hookUserInfoMethod(methodName: String, newValue: Any) {
-            hookAndReplaceMethodPrintOrigin(loadPackageParam,"com.bepskq.hxgohq.model.jsondata.DataVideoDetail",methodName, newValue)
+            hookAndReplaceMethodAndPrintResult(loadPackageParam,"com.bepskq.hxgohq.model.jsondata.DataVideoDetail",methodName, newValue)
         }
         kotlin.runCatching {
             val list = mutableListOf<Pair<kotlin.String, kotlin.Any>>()
@@ -121,7 +116,7 @@ class HookHX : HookPackage {
     }
     private fun hookLivePlayer(loadPackageParam: XC_LoadPackage.LoadPackageParam){
         fun hookUserInfoMethod(methodName: String, newValue: Any) {
-            hookAndReplaceMethodPrintOrigin(loadPackageParam,"com.bepskq.hxgohq.model.remote.LiveDetail",methodName, newValue)
+            hookAndReplaceMethodAndPrintResult(loadPackageParam,"com.bepskq.hxgohq.model.remote.LiveDetail",methodName, newValue)
         }
         kotlin.runCatching {
             val list = mutableListOf<Pair<kotlin.String, kotlin.Any>>()
@@ -137,7 +132,7 @@ class HookHX : HookPackage {
     }
     private fun hookRemoveNotice(loadPackageParam: XC_LoadPackage.LoadPackageParam){
         fun hookUserInfoMethod(methodName: String, newValue: Any) {
-            hookAndReplaceMethodPrintOrigin(loadPackageParam,"com.bepskq.hxgohq.model.jsondata.DataSystemInfo",methodName, newValue)
+            hookAndReplaceMethodAndPrintResult(loadPackageParam,"com.bepskq.hxgohq.model.jsondata.DataSystemInfo",methodName, newValue)
         }
         kotlin.runCatching {
             val list = mutableListOf<Pair<kotlin.String, kotlin.Any>>()

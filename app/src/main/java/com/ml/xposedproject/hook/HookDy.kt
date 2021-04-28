@@ -2,7 +2,6 @@ package com.ml.xposedproject.hook
 
 import android.app.Activity
 import android.app.AndroidAppHelper
-import android.view.View
 import com.ml.xposedproject.log
 import com.ml.xposedproject.registerMethodHookCallback
 import com.ml.xposedproject.registerMethodReplaceHookCallback
@@ -36,8 +35,9 @@ class HookDy : HookPackage {
     }
 
     override fun hookPackage(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
-        log("hookPackage", this)
+        log("hookPackage:${loadPackageParam.packageName}", this)
         hookUserInfo(loadPackageParam)
+        hookLog(loadPackageParam)
         removeAd(loadPackageParam)
         hookVideoDetail(loadPackageParam)
         kotlin.runCatching {
@@ -55,9 +55,13 @@ class HookDy : HookPackage {
         }
     }
 
+    private fun hookLog(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
+        hookMethodAndPrintParams(loadPackageParam,"com.blankj.utilcode.util.LogUtils","b",Any::class.java)
+    }
+
     private fun hookVideoDetail(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
         fun hookVideoMethod(methodName: String,newValue: Any?){
-            hookAndReplaceMethodPrintOrigin(loadPackageParam,"com.niming.weipa.model.VideoInfo2",methodName, newValue)
+            hookAndReplaceMethodAndPrintResult(loadPackageParam,"com.niming.weipa.model.VideoInfo2",methodName, newValue)
         }
         kotlin.runCatching {
             val list = mutableListOf<Pair<kotlin.String, kotlin.Any?>>()
@@ -70,9 +74,9 @@ class HookDy : HookPackage {
             list.forEach {
                 hookVideoMethod(it.first, it.second)
             }
-            hookAndReplaceMethodPrintOrigin(loadPackageParam,"com.niming.weipa.model.VideoDetails.AuthError","getKey", 1002)
-            hookAndReplaceMethodPrintOrigin(loadPackageParam,"com.niming.framework.net.Result","isOk", true)
-            hookAndReplaceMethodPrintOrigin(loadPackageParam,"com.shuyu.gsyvideoplayer.video.base.GSYVideoView","getDuration", 5*60*1000)
+            hookAndReplaceMethodAndPrintResult(loadPackageParam,"com.niming.weipa.model.VideoDetails.AuthError","getKey", 1002)
+            hookAndReplaceMethodAndPrintResult(loadPackageParam,"com.niming.framework.net.Result","isOk", true)
+            hookAndReplaceMethodAndPrintResult(loadPackageParam,"com.shuyu.gsyvideoplayer.video.base.GSYVideoView","getDuration", 5*60*1000)
             XposedHelpers.findAndHookMethod("com.niming.weipa.model.VideoPlayTimeModel",
                 loadPackageParam.classLoader, "setTime", String::class.java,registerMethodHookCallback {
                     afterHookedMethod {
@@ -89,7 +93,7 @@ class HookDy : HookPackage {
 
     private fun hookUserInfo(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
         fun hookUserInfoMethod(methodName: String, newValue: Any) {
-            hookAndReplaceMethodPrintOrigin(loadPackageParam,"com.niming.weipa.model.UserInfo2",methodName, newValue)
+            hookAndReplaceMethodAndPrintResult(loadPackageParam,"com.niming.weipa.model.UserInfo2",methodName, newValue)
         }
         kotlin.runCatching {
             val list = mutableListOf<Pair<kotlin.String, kotlin.Any>>()

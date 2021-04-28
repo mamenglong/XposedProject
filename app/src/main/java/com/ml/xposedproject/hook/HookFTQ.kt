@@ -41,47 +41,28 @@ class HookFTQ : HookPackage {
         }.onFailure {
             log("hookFTQ 启动检测 onFailure handleLoadPackage:${it}", this)
         }
-        hookUserInfo(loadPackageParam)
+        //hookUserInfo(loadPackageParam)
         hookAndbackend(loadPackageParam)
         hookDialog(loadPackageParam)
     }
-    private fun hookUserInfo(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
-        fun hookUserInfoMethod(methodName: String, newValue: Any) {
-            hookAndReplaceMethodPrintOrigin(loadPackageParam,"com.vpn.code.bean.UserExpirationReply",methodName, newValue)
-        }
-        kotlin.runCatching {
-            val list = mutableListOf<Pair<kotlin.String, kotlin.Any>>()
-            list.apply {
-                add("getEexpire_at" to (System.currentTimeMillis()+10000)/1000)
-                add("isIs_enabled" to true)
-                add("getUserExpiration" to 86400 * 2)
-                add("getEexpiration" to 1000)
-                add("isIs_vip" to true)
-                add("isVip_user_view" to true)
-                add("getEexpire_type" to 2)
-                add("getUserFlows" to 1024)
-            }
-            list.forEach {
-                hookUserInfoMethod(it.first, it.second)
-            }
-        }.onFailure {
-            log("onFailure hookUserInfo:${it}", this)
-        }
-    }
     private fun hookAndbackend(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
         fun hookUserInfoMethod(methodName: String, newValue: Any) {
-            hookAndReplaceMethodPrintOrigin(loadPackageParam,"andbackend",methodName, newValue)
+            hookAndReplaceMethodAndPrintResult(loadPackageParam,"andbackend.Andbackend",methodName, newValue)
         }
         kotlin.runCatching {
             val list = mutableListOf<Pair<kotlin.String, kotlin.Any>>()
             list.apply {
                // add("getUserBindStatus" to System.currentTimeMillis()+10000)
-                add("getUserBindStatus" to 1)
-                add("getUserExpiration" to 1000)
+                //add("getUserBindStatus" to 1)
+                //add("getUserExpiration" to 1000)
                 add("getUserPro" to true)
-                add("isPro" to 1)
+                add("isPro" to 1L)
                 add("isUserMarkDanger" to false)
                 add("isLocalTimeCorrect" to true)
+                val ex = 86400 *3
+                add("expiration" to """
+                    {"UserFlows":10737418240,"UserExpiration":$ex,"is_enabled":true,"expire_at":1679174094,"is_vip":true,"eexpire_at":1679174094,"eexpire_type":1,"eexpiration":1679174094,"eevip_balanceflow":100}
+                """.trimIndent())
             }
             list.forEach {
                 hookUserInfoMethod(it.first, it.second)
@@ -103,7 +84,7 @@ class HookFTQ : HookPackage {
 
 
         fun hookUserInfoMethod(methodName: String, newValue: Any) {
-            hookAndReplaceMethodPrintOrigin(loadPackageParam,"com.vpn.code.activity.MainActivity",methodName, newValue)
+            hookAndReplaceMethodAndPrintResult(loadPackageParam,"com.vpn.code.activity.MainActivity",methodName, newValue)
         }
         kotlin.runCatching {
             val list = mutableListOf<Pair<kotlin.String, kotlin.Any>>()
@@ -116,8 +97,9 @@ class HookFTQ : HookPackage {
             /**
              * hook LogUtil
              */
-            hookStaticMethodPrint(loadPackageParam,"com.vpn.code.g.h","a",String::class.java.name)
-            hookStaticMethodPrint(loadPackageParam,"com.vpn.code.g.h","c",String::class.java.name)
+            hookMethodAndPrintParams(loadPackageParam,"com.vpn.code.g.h","a",String::class.java.name)
+            hookMethodAndPrintParams(loadPackageParam,"com.vpn.code.g.h","c",String::class.java.name)
+            hookMethodAndPrintParams(loadPackageParam,"com.vpn.code.g.h","b",String::class.java,String::class.java)
         }.onFailure {
             log("onFailure hookUserInfo:${it}", this)
         }

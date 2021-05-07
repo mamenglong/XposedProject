@@ -27,6 +27,9 @@ interface HookPackage {
         get() = AndroidAppHelper.currentApplication()
 
     fun canHook(loadPackageParam: XC_LoadPackage.LoadPackageParam): Boolean {
+        val target = getPackage()
+        val src = loadPackageParam.packageName
+        log("canHook target:$target source:$src can:${target == src}", this)
         return loadPackageParam.packageName == getPackage()
     }
 

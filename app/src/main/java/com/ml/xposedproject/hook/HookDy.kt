@@ -31,24 +31,15 @@ class HookDy : HookPackage {
     }
 
     override fun getPackage(): String {
-        return "com.wechat.yajiji1123"
+        return "com.user.ccnineonepros.android"
     }
 
     override fun hookPackage(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
         log("hookPackage:${loadPackageParam.packageName}", this)
         hookUserInfo(loadPackageParam)
-        hookLog(loadPackageParam)
-        removeAd(loadPackageParam)
-        hookVideoDetail(loadPackageParam)
+        //hookLog(loadPackageParam)
+
         kotlin.runCatching {
-            XposedHelpers.findAndHookMethod("com.niming.weipa.model.VideoDetails.AuthError",
-                loadPackageParam.classLoader, "getInfo", registerMethodHookCallback {
-                    afterHookedMethod {
-                        log("getInfo:${it?.result}  ${it?.args?.size}", this)
-                        //it?.result = "超级至尊"
-                        log("getInfo:${it?.result}  ${it?.args}", this)
-                    }
-                })
 
         }.onFailure {
             log("onFailure getInfo :${it}", this)
@@ -92,29 +83,20 @@ class HookDy : HookPackage {
     }
 
     private fun hookUserInfo(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
-        fun hookUserInfoMethod(methodName: String, newValue: Any) {
-            hookAndReplaceMethodAndPrintResult(loadPackageParam,"com.niming.weipa.model.UserInfo2",methodName, newValue)
-        }
         kotlin.runCatching {
-            val list = mutableListOf<Pair<kotlin.String, kotlin.Any>>()
-            list.apply {
-                add("getIs_vip" to "y")
-                add("getNick" to "小可爱")
-                add("getCoins" to 300)
-                add("getRank_type" to 9)
-                add("getVideo_long_count" to 10)
-                add("getVideo_short_count" to 10)
-                add("getVip_expired" to "2020-11-27 22:22:22")
-                add("getVip_expired_text" to "2020-11-27 22:22:22")
-                add("getVip_text" to "超级至尊")
-                add("getBuy_floor_count" to 100)
-                add("getBuy_image_count" to 100)
-                add("getBuy_short_count" to 100)
-                add("getBuy_long_count" to 100)
-            }
-            list.forEach {
-                hookUserInfoMethod(it.first, it.second)
-            }
+            XposedHelpers.findAndHookConstructor("com.ninetyone.pron.android.bean.UserInfoBean",loadPackageParam.classLoader,
+                registerMethodHookCallback {
+                    afterHookedMethod{
+                        val ob = it!!.thisObject
+                        XposedHelpers.setObjectField(ob,"nickname","你好啊")
+                        log("onSuccess hookUserInfo:${ob.javaClass.name}", this)
+                    }
+                })
+            val clazz = XposedHelpers.findClass("com.ninetyone.pron.android.bean.UserInfoBean",loadPackageParam.classLoader)
+            val filed = XposedHelpers.findField(clazz,"nickname")
+            filed.isAccessible = true
+            filed.set(clazz.newInstance(),"hahahahh")
+            log("onSuccess hookUserInfo", this)
         }.onFailure {
             log("onFailure hookUserInfo:${it}", this)
         }

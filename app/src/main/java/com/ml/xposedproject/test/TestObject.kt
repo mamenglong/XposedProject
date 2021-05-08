@@ -14,4 +14,5 @@ object TestObject {
     fun testHook(msg:String){
         Log.d(this.javaClass.simpleName,msg)
     }
+    var testFiled:String = "testFiled"
 }

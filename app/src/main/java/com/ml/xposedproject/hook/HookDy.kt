@@ -84,18 +84,7 @@ class HookDy : HookPackage {
 
     private fun hookUserInfo(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
         kotlin.runCatching {
-            XposedHelpers.findAndHookConstructor("com.ninetyone.pron.android.bean.UserInfoBean",loadPackageParam.classLoader,
-                registerMethodHookCallback {
-                    afterHookedMethod{
-                        val ob = it!!.thisObject
-                        XposedHelpers.setObjectField(ob,"nickname","你好啊")
-                        log("onSuccess hookUserInfo:${ob.javaClass.name}", this)
-                    }
-                })
-            val clazz = XposedHelpers.findClass("com.ninetyone.pron.android.bean.UserInfoBean",loadPackageParam.classLoader)
-            val filed = XposedHelpers.findField(clazz,"nickname")
-            filed.isAccessible = true
-            filed.set(clazz.newInstance(),"hahahahh")
+            setObjectField(loadPackageParam,"com.ninetyone.pron.android.bean.UserInfoBean","nickname","hahahahh")
             log("onSuccess hookUserInfo", this)
         }.onFailure {
             log("onFailure hookUserInfo:${it}", this)

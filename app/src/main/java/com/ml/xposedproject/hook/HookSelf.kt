@@ -1,6 +1,7 @@
 package com.ml.xposedproject.hook
 
 import com.ml.xposedproject.*
+import com.ml.xposedproject.test.TestFiled
 import com.ml.xposedproject.test.TestObject
 import de.robv.android.xposed.XposedHelpers
 import de.robv.android.xposed.callbacks.XC_LoadPackage
@@ -55,6 +56,8 @@ class HookSelf : HookPackage {
                 })
 
             hookMethodAndPrintParams(loadPackageParam,TestObject::class.java.name,"testHook",String::class.java)
+            setObjectField(loadPackageParam,TestObject::class.java.name,"testFiled","TestObject.class",true)
+            setObjectField(loadPackageParam,TestFiled::class.java.name,"testFiled","TestFiled.class")
         }.onFailure {
             log("hookSelf onFailure:${it.message}", this)
         }

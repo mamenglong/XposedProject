@@ -3,6 +3,7 @@ package com.ml.xposedproject
 import android.graphics.Rect
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Adapter
@@ -15,6 +16,7 @@ import androidx.viewbinding.ViewBinding
 import com.ml.xposedproject.databinding.ActivityMainBinding
 import com.ml.xposedproject.databinding.ItemHookListBinding
 import com.ml.xposedproject.hook.HookPackage
+import com.ml.xposedproject.test.TestFiled
 import com.ml.xposedproject.test.TestObject
 import com.ml.xposedproject.tools.Config
 import dalvik.system.DexClassLoader
@@ -53,8 +55,22 @@ class MainActivity : AppCompatActivity() {
         initView()
         viewBinding.btnTest.setOnClickListener {
             TestObject.testHook("${System.currentTimeMillis()}")
+            val f = TestFiled()
+            f.isVip = f.isVip
+            if (f.isVip){
+                //do something
+            }else{
+
+            }
+            f.testFiled ="sssssss"
+            Log.d("MainActivity", f.testFiled)
+            TestObject.testFiled = "ssss"
+            Log.d("MainActivity", TestObject.testFiled)
+
+
         }
     }
+
 
     override fun onResume() {
         super.onResume()

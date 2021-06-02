@@ -57,5 +57,6 @@ object Config {
         const val ENABLE_HX = "ENABLE_HX"
         const val ENABLE_FTQ = "ENABLE_FTQ"
         const val ENABLE_EXPORT = "ENABLE_EXPORT"
+        const val ENABLE_HXMH = "ENABLE_HXMH"
     }
 }

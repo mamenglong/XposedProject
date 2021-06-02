@@ -20,6 +20,7 @@ object HookFactory {
         hookList.add(HookHX())
         hookList.add(HookFTQ())
         hookList.add(ExportHook())
+        hookList.add(HookHXMH())
     }
     fun doHook(loadPackageParam: XC_LoadPackage.LoadPackageParam){
         log("doHook hookList size :${hookList.size}",this)
@@ -27,5 +28,8 @@ object HookFactory {
             if (it.canHook(loadPackageParam))
                 it.doHook(loadPackageParam)
         }
+    }
+    fun register(hook:HookPackage){
+        hookList.add(hook)
     }
 }

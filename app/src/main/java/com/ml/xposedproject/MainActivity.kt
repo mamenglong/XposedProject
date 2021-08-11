@@ -34,12 +34,14 @@ data class DataItem(
 class MainActivity : AppCompatActivity() {
     private lateinit var viewBinding: ActivityMainBinding
     private val list = mutableListOf<DataItem>().apply {
+        add(DataItem("一加多开", Config.KEYS.ENABLE_O_P_M_A))
         add(DataItem("开启小妖精美化hook", Config.KEYS.ENABLE_XYJMH))
         add(DataItem("开启抖音hook", Config.KEYS.ENABLE_DY))
         add(DataItem("开启红杏hook", Config.KEYS.ENABLE_HX))
         add(DataItem("开启佛跳墙hook", Config.KEYS.ENABLE_FTQ))
         add(DataItem("开启导出dex", Config.KEYS.ENABLE_EXPORT))
         add(DataItem("开启嘿咻hook", Config.KEYS.ENABLE_HXMH))
+        add(DataItem("开启星辰影视hook", Config.KEYS.ENABLE_XCYS))
     }
     private lateinit var mAdapter: RecyclerView.Adapter<ViewHolder>
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -169,4 +169,59 @@ interface BaseHookMethod {
 
 
     }
+    fun hookAndPrintResult(
+        loadPackageParam: XC_LoadPackage.LoadPackageParam,
+        className: String,
+        methodName: String,
+        vararg params: Array<out Any>
+    ) {
+        kotlin.runCatching {
+            XposedHelpers.findAndHookMethod(className,
+                loadPackageParam.classLoader, methodName, *params, registerMethodHookCallback {
+                    afterHookedMethod {
+                        val old = "${it?.result}"
+                        log("$className.$methodName value:$old ", this@BaseHookMethod)
+                    }
+                })
+            log(
+                "hookAndReplaceMethodPrintOrigin onSuccess $className.$methodName",
+                this
+            )
+        }.onFailure {
+            log(
+                "hookAndReplaceMethodPrintOrigin onFailure $className.$methodName ->:${it.message}",
+                this
+            )
+        }
+    }
+    fun<T> hookAndReplaceMethodByConditionAndPrintResult(
+        loadPackageParam: XC_LoadPackage.LoadPackageParam,
+        className: String,
+        methodName: String,
+        newValue: T?,
+        condition:(T)->Boolean,
+        vararg params: Array<out Any>
+    ) {
+        kotlin.runCatching {
+            XposedHelpers.findAndHookMethod(className,
+                loadPackageParam.classLoader, methodName, *params, registerMethodHookCallback {
+                    afterHookedMethod {
+                        val old = it?.result as T
+                        if (condition.invoke(old)) {
+                            it?.result = newValue
+                        }
+                        log("$className.$methodName old:$old new:${it?.result} ", this@BaseHookMethod)
+                    }
+                })
+            log(
+                "hookAndReplaceMethodPrintOrigin onSuccess $className.$methodName",
+                this
+            )
+        }.onFailure {
+            log(
+                "hookAndReplaceMethodPrintOrigin onFailure $className.$methodName ->:${it.message}",
+                this
+            )
+        }
+    }
 }

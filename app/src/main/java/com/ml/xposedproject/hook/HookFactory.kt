@@ -23,6 +23,7 @@ object HookFactory {
         hookList.add(HookHXMH())
         hookList.add(HookOnePlusMultiApp())
         hookList.add(HookXCYS())
+        hookList.add(HookHLW())
     }
     fun doHook(loadPackageParam: XC_LoadPackage.LoadPackageParam){
         log("doHook hookList size :${hookList.size}",this)

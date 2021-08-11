@@ -24,7 +24,7 @@ import de.robv.android.xposed.XC_MethodHook
  * Package: com.ml.xposedproject.hook
  * Project: XposedProject
  */
-class HookXCYS : HookPackage {
+class HookHLW : HookPackage {
     override fun enableHook(): Boolean {
         log(
             "enableHook context:${AndroidAppHelper.currentPackageName()}  context:${context?.packageName}",
@@ -36,14 +36,13 @@ class HookXCYS : HookPackage {
     }
 
     override fun getPackage(): String {
-        return "com.xingchen.xcfilms"
+        return "com.adult.zero"
     }
 
     override fun hookPackage(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
         log("hookPackage ${loadPackageParam.packageName}", this)
         kotlin.runCatching {
             hookUserInfo(loadPackageParam)
-            hookSplash(loadPackageParam)
         }.onFailure {
             log("hookSelf onFailure:${it.message}", this)
         }
@@ -51,15 +50,19 @@ class HookXCYS : HookPackage {
     }
     private fun hookUserInfo(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
         fun hookUserInfoMethod(methodName: String, newValue: Any) {
-            hookAndReplaceMethodAndPrintResult(loadPackageParam,"com.xiaocao.p2p.entity.MineUserInfo",methodName, newValue)
+            hookAndReplaceMethodAndPrintResult(loadPackageParam,"com.hlw.movie.commonservice.cache.entity.SessionUser",methodName, newValue)
         }
         kotlin.runCatching {
             val list = mutableListOf<Pair<kotlin.String, kotlin.Any>>()
             list.apply {
-                add("getVip_validity" to (System.currentTimeMillis()+5*24*60*60*1000) /1000)
-                add("getIs_vip" to 1)
-                add("getNickname" to "哈哈哈哈哈")
-                add("getPhone" to "15803942356")
+                add("getVipExpireTime" to (System.currentTimeMillis()+5*24*60*60*1000).toString())
+                add("isSvip" to true)
+                add("isForeverSVIP" to true)
+                add("getVipType" to 8)
+                add("getViewEveryday" to 100)
+                add("getViewElse" to 100)
+                add("isViewNoLimit" to true)
+                add("getCurrentMoney" to 100.0)
             }
             list.forEach {
                 hookUserInfoMethod(it.first, it.second)

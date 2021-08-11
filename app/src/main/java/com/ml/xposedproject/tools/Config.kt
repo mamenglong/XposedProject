@@ -60,5 +60,6 @@ object Config {
         const val ENABLE_HXMH = "ENABLE_HXMH"
         const val ENABLE_O_P_M_A = "ENABLE_O_P_M_A"
         const val ENABLE_XCYS = "ENABLE_XCYS"
+        const val ENABLE_HLW = "ENABLE_HLW"
     }
 }

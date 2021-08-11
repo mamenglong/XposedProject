@@ -42,6 +42,7 @@ class MainActivity : AppCompatActivity() {
         add(DataItem("开启导出dex", Config.KEYS.ENABLE_EXPORT))
         add(DataItem("开启嘿咻hook", Config.KEYS.ENABLE_HXMH))
         add(DataItem("开启星辰影视hook", Config.KEYS.ENABLE_XCYS))
+        add(DataItem("开启葫芦娃hook", Config.KEYS.ENABLE_HLW))
     }
     private lateinit var mAdapter: RecyclerView.Adapter<ViewHolder>
     override fun onCreate(savedInstanceState: Bundle?) {

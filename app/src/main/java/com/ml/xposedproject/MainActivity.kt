@@ -1,29 +1,20 @@
 package com.ml.xposedproject
 
 import android.graphics.Rect
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Adapter
 import android.widget.Toast
-import androidx.appcompat.widget.SwitchCompat
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.marginLeft
 import androidx.core.view.marginRight
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewbinding.ViewBinding
 import com.ml.xposedproject.databinding.ActivityMainBinding
 import com.ml.xposedproject.databinding.ItemHookListBinding
-import com.ml.xposedproject.hook.HookPackage
 import com.ml.xposedproject.test.TestFiled
 import com.ml.xposedproject.test.TestObject
 import com.ml.xposedproject.tools.Config
-import dalvik.system.DexClassLoader
-import dalvik.system.PathClassLoader
-import de.robv.android.xposed.callbacks.XC_LoadPackage
-import kotlinx.android.synthetic.main.activity_main.*
-import java.io.File
 
 data class DataItem(
     val label: String,
@@ -50,6 +41,7 @@ class MainActivity : AppCompatActivity() {
         viewBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
         initHookView()
+        setTitle("${title}:${BuildConfig.buildTime}")
     }
 
     private fun initHookView() {

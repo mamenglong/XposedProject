@@ -16,7 +16,7 @@ import de.robv.android.xposed.XposedBridge
  * Project: XposedProject
  */
 fun log(msg: String, clazz: Any? = null){
-    XposedBridge.log("${clazz?.javaClass?.simpleName ?: "menglong"}->$msg")
+    XposedBridge.log("${BuildConfig.buildTime}${clazz?.javaClass?.simpleName ?: "menglong"}->$msg")
    // Log.d(clazz?.javaClass?.simpleName ?: "menglong",msg)
 }
 

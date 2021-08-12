@@ -56,7 +56,7 @@ interface HookPackage:BaseHookMethod {
 
                         Toast.makeText(
                             app,
-                            "hookEnable:${enableHook()} ${loadPackageParam.appInfo.loadLabel(app.packageManager)}:${loadPackageParam.packageName} ",
+                            "hookEnable:${enableHook()} ${loadPackageParam.appInfo.loadLabel(app.packageManager)}\n${loadPackageParam.packageName} ",
                             Toast.LENGTH_SHORT
                         ).show()
                     }

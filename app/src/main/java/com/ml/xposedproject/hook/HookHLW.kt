@@ -3,6 +3,7 @@ package com.ml.xposedproject.hook
 import android.app.AndroidAppHelper
 import android.content.Context
 import android.widget.Toast
+import androidx.core.text.buildSpannedString
 import com.ml.xposedproject.*
 import com.ml.xposedproject.test.TestFiled
 import com.ml.xposedproject.test.TestObject
@@ -30,7 +31,7 @@ class HookHLW : HookPackage {
             "enableHook context:${AndroidAppHelper.currentPackageName()}  context:${context?.packageName}",
             this
         )
-        val enable = context?.let { Config.getBool(it, Config.KEYS.ENABLE_XCYS) } ?: false
+        val enable = context?.let { Config.getBool(it, Config.KEYS.ENABLE_HLW) } ?: false
         log("enableHook enable:$enable", this)
         return enable
     }
@@ -42,21 +43,25 @@ class HookHLW : HookPackage {
     override fun hookPackage(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
         log("hookPackage ${loadPackageParam.packageName}", this)
         kotlin.runCatching {
-            hookUserInfo(loadPackageParam)
+            hookUserInfo(loadPackageParam, "com.hlw.movie.commonservice.cache.entity.SessionUser")
+            hookUserInfo(loadPackageParam, "com.hlw.movie.user.mvp.model.entity.rep.UserInfo")
+            hookSplash(loadPackageParam)
         }.onFailure {
             log("hookSelf onFailure:${it.message}", this)
         }
 
     }
-    private fun hookUserInfo(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
+    private fun hookUserInfo(loadPackageParam: XC_LoadPackage.LoadPackageParam,className:String) {
         fun hookUserInfoMethod(methodName: String, newValue: Any) {
-            hookAndReplaceMethodAndPrintResult(loadPackageParam,"com.hlw.movie.commonservice.cache.entity.SessionUser",methodName, newValue)
+            hookAndReplaceMethodAndPrintResult(loadPackageParam,className,methodName, newValue)
         }
         kotlin.runCatching {
             val list = mutableListOf<Pair<kotlin.String, kotlin.Any>>()
             list.apply {
                 add("getVipExpireTime" to (System.currentTimeMillis()+5*24*60*60*1000).toString())
+                //add("getVipExpireTimestamp" to (System.currentTimeMillis()+5*24*60*60*1000).toString())
                 add("isSvip" to true)
+                add("isVip" to true)
                 add("isForeverSVIP" to true)
                 add("getVipType" to 8)
                 add("getViewEveryday" to 100)
@@ -67,7 +72,9 @@ class HookHLW : HookPackage {
             list.forEach {
                 hookUserInfoMethod(it.first, it.second)
             }
-
+            hookMethodAndPrintParams(loadPackageParam,className,"setVipExpireTime",String::class.java)
+            hookMethodAndPrintParams(loadPackageParam,className,"setVipExpireTimestamp",String::class.java)
+            hookMethodAndPrintParams(loadPackageParam,className,"setVipAuth",java.lang.reflect.Array.newInstance(String::class.java, 2).javaClass)
         }.onFailure {
             log("onFailure hookUserInfo:${it}", this)
         }
@@ -75,13 +82,26 @@ class HookHLW : HookPackage {
 
     private fun hookSplash(loadPackageParam: XC_LoadPackage.LoadPackageParam){
         kotlin.runCatching {
-            findAndHookMethod(loadPackageParam,"com.xiaocao.p2p.ui.login.splash.SplashActivity","initData",
+            findAndHookMethod(loadPackageParam,"com.hlw.movie.splash.mvp.ui.activity.SplashActivity","startCountdown",
                 registerMethodReplaceHookCallback {
                     replaceHookedMethod{
                         Toast.makeText(context,"跳过广告", Toast.LENGTH_SHORT).show()
-                        XposedHelpers.callMethod(it!!.thisObject,"goToMain")
+                        XposedHelpers.setBooleanField(it!!.thisObject,"curDisplayADNow",true)
+                        XposedHelpers.callMethod(it!!.thisObject,"onResume")
                     }
                 })
+            findAndHookMethod(loadPackageParam,"com.hlw.movie.common.base.HLWBaseActivity","initNoticePop",
+                registerMethodReplaceHookCallback {
+                    replaceHookedMethod{
+                        Toast.makeText(context,"跳过弹窗1", Toast.LENGTH_SHORT).show()
+                    }
+                })
+            findAndHookMethod(loadPackageParam,"com.hlw.movie.common.base.HLWBaseActivity","showNoticeView",
+                registerMethodReplaceHookCallback {
+                    replaceHookedMethod{
+                        Toast.makeText(context,"跳过弹窗2", Toast.LENGTH_SHORT).show()
+                    }
+                },Boolean::class.java)
         }
     }
 }

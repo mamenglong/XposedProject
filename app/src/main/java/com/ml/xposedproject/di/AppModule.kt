@@ -5,7 +5,7 @@ import com.ml.xposedproject.App
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ApplicationComponent
+import dagger.hilt.components.SingletonComponent
 
 /**
  * Author: Menglong Ma
@@ -15,8 +15,20 @@ import dagger.hilt.android.components.ApplicationComponent
  * Package: com.ml.xposedproject.di
  * Project: XposedProject
  */
+/**
+ * SingletonComponent	Application
+ViewModelComponent	ViewModel
+ActivityComponent	Activity
+FragmentComponent	Fragment
+ViewComponent	View
+ViewWithFragmentComponent	View with @WithFragmentBindings
+ServiceComponent	Service
+
+ */
+//https://dagger.dev/hilt/components.html#hilt-components
+
 @Module
-@InstallIn(ApplicationComponent::class)
+@InstallIn(SingletonComponent::class)
 class AppModule {
 
     @Provides

@@ -15,13 +15,14 @@ import com.ml.xposedproject.databinding.ItemHookListBinding
 import com.ml.xposedproject.test.TestFiled
 import com.ml.xposedproject.test.TestObject
 import com.ml.xposedproject.tools.Config
+import dagger.hilt.android.AndroidEntryPoint
 
 data class DataItem(
     val label: String,
     val key: String,
     val id: Int = System.currentTimeMillis().toInt()
 )
-
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var viewBinding: ActivityMainBinding
     private val list = mutableListOf<DataItem>().apply {

@@ -55,7 +55,7 @@ class HookSelf : HookPackage {
                     }
                 })
 
-            hookMethodAndPrintParams(loadPackageParam,TestObject::class.java.name,"testHook",String::class.java)
+            this.hookMethodAndPrint(loadPackageParam,TestObject::class.java.name,"testHook",String::class.java)
             setObjectField(loadPackageParam,TestObject::class.java.name,"testFiled","TestObject.class",true)
             setObjectField(loadPackageParam,TestFiled::class.java.name,"testFiled","TestFiled.class")
         }.onFailure {

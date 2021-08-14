@@ -1,11 +1,8 @@
 package com.ml.xposedproject.hook
 
 import android.app.AndroidAppHelper
-import android.widget.Toast
 import com.ml.xposedproject.log
-import com.ml.xposedproject.registerMethodHookCallback
 import com.ml.xposedproject.tools.Config
-import de.robv.android.xposed.XposedHelpers
 import de.robv.android.xposed.callbacks.XC_LoadPackage
 
 /**
@@ -42,7 +39,7 @@ class HookHXMH : HookPackage {
     }
     private fun hookUserInfo(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
         fun hookUserInfoMethod(methodName: String, newValue: Any) {
-            hookAndReplaceMethodAndPrintResult(loadPackageParam,"com.heyshow.comic.watch.data.bean.UserInfoBean",methodName, newValue)
+            hookAndReplaceMethod(loadPackageParam,"com.heyshow.comic.watch.data.bean.UserInfoBean",methodName, newValue)
         }
         kotlin.runCatching {
             val list = mutableListOf<Pair<kotlin.String, kotlin.Any>>()
@@ -61,19 +58,19 @@ class HookHXMH : HookPackage {
             list.forEach {
                 hookUserInfoMethod(it.first, it.second)
             }
-            hookAndPrintResult(loadPackageParam,"com.heyshow.comic.watch.data.bean.UserInfoBean",
+            hookMethodAndPrint(loadPackageParam,"com.heyshow.comic.watch.data.bean.UserInfoBean",
                 "getId")
-            hookAndPrintResult(loadPackageParam,"com.heyshow.comic.watch.data.bean.UserInfoBean",
+            hookMethodAndPrint(loadPackageParam,"com.heyshow.comic.watch.data.bean.UserInfoBean",
                 "getDiamondBonusDayN")
-            hookAndPrintResult(loadPackageParam,"com.heyshow.comic.watch.data.bean.UserInfoBean",
+            hookMethodAndPrint(loadPackageParam,"com.heyshow.comic.watch.data.bean.UserInfoBean",
                 "getLevelName")
-            hookAndPrintResult(loadPackageParam,"com.heyshow.comic.watch.data.bean.UserInfoBean",
+            hookMethodAndPrint(loadPackageParam,"com.heyshow.comic.watch.data.bean.UserInfoBean",
                 "getPassword")
-            hookAndPrintResult(loadPackageParam,"com.heyshow.comic.watch.data.bean.UserInfoBean",
+            hookMethodAndPrint(loadPackageParam,"com.heyshow.comic.watch.data.bean.UserInfoBean",
                 "getRegisterTime")
-            hookAndReplaceMethodByConditionAndPrintResult(loadPackageParam,"com.heyshow.comic.watch.data.bean.BaseResponse",
-                "getCode",100,{
-                    it==1009
+            hookAndReplaceMethodByCondition<Int>(loadPackageParam,"com.heyshow.comic.watch.data.bean.BaseResponse",
+                "getCode",100,{result,params->
+                    result==1009
                 })
             
         }.onFailure {
@@ -82,7 +79,7 @@ class HookHXMH : HookPackage {
     }
     private fun hookVideoInfo(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
         fun hookUserInfoMethod(methodName: String, newValue: Any) {
-            hookAndReplaceMethodAndPrintResult(loadPackageParam,"com.bepskq.hxgohq.model.remote.VideoInfo",methodName, newValue)
+            hookAndReplaceMethod(loadPackageParam,"com.bepskq.hxgohq.model.remote.VideoInfo",methodName, newValue)
         }
         kotlin.runCatching {
             val list = mutableListOf<Pair<kotlin.String, kotlin.Any>>()
@@ -99,7 +96,7 @@ class HookHXMH : HookPackage {
     }
     private fun hookBannerInfo(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
         fun hookUserInfoMethod(methodName: String, newValue: Any) {
-            hookAndReplaceMethodAndPrintResult(loadPackageParam,
+            hookAndReplaceMethod(loadPackageParam,
                 "com.bepskq.hxgohq.model.remote.Banner",methodName, newValue)
         }
         kotlin.runCatching {
@@ -117,7 +114,7 @@ class HookHXMH : HookPackage {
 
     private fun hookPlayer(loadPackageParam: XC_LoadPackage.LoadPackageParam){
         fun hookUserInfoMethod(methodName: String, newValue: Any) {
-            hookAndReplaceMethodAndPrintResult(loadPackageParam,"com.bepskq.hxgohq.model.jsondata.DataVideoDetail",methodName, newValue)
+            hookAndReplaceMethod(loadPackageParam,"com.bepskq.hxgohq.model.jsondata.DataVideoDetail",methodName, newValue)
         }
         kotlin.runCatching {
             val list = mutableListOf<Pair<kotlin.String, kotlin.Any>>()
@@ -133,7 +130,7 @@ class HookHXMH : HookPackage {
     }
     private fun hookLivePlayer(loadPackageParam: XC_LoadPackage.LoadPackageParam){
         fun hookUserInfoMethod(methodName: String, newValue: Any) {
-            hookAndReplaceMethodAndPrintResult(loadPackageParam,"com.bepskq.hxgohq.model.remote.LiveDetail",methodName, newValue)
+            hookAndReplaceMethod(loadPackageParam,"com.bepskq.hxgohq.model.remote.LiveDetail",methodName, newValue)
         }
         kotlin.runCatching {
             val list = mutableListOf<Pair<kotlin.String, kotlin.Any>>()
@@ -149,7 +146,7 @@ class HookHXMH : HookPackage {
     }
     private fun hookRemoveNotice(loadPackageParam: XC_LoadPackage.LoadPackageParam){
         fun hookUserInfoMethod(methodName: String, newValue: Any) {
-            hookAndReplaceMethodAndPrintResult(loadPackageParam,"com.bepskq.hxgohq.model.jsondata.DataSystemInfo",methodName, newValue)
+            hookAndReplaceMethod(loadPackageParam,"com.bepskq.hxgohq.model.jsondata.DataSystemInfo",methodName, newValue)
         }
         kotlin.runCatching {
             val list = mutableListOf<Pair<kotlin.String, kotlin.Any>>()

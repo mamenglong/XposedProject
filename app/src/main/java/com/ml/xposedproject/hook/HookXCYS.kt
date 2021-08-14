@@ -1,19 +1,11 @@
 package com.ml.xposedproject.hook
 
 import android.app.AndroidAppHelper
-import android.content.Context
 import android.widget.Toast
 import com.ml.xposedproject.*
-import com.ml.xposedproject.test.TestFiled
-import com.ml.xposedproject.test.TestObject
 import com.ml.xposedproject.tools.Config
 import de.robv.android.xposed.XposedHelpers
 import de.robv.android.xposed.callbacks.XC_LoadPackage
-import de.robv.android.xposed.XC_MethodHook.MethodHookParam
-
-import de.robv.android.xposed.XC_MethodHook
-
-
 
 
 /**
@@ -51,7 +43,7 @@ class HookXCYS : HookPackage {
     }
     private fun hookUserInfo(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
         fun hookUserInfoMethod(methodName: String, newValue: Any) {
-            hookAndReplaceMethodAndPrintResult(loadPackageParam,"com.xiaocao.p2p.entity.MineUserInfo",methodName, newValue)
+            hookAndReplaceMethod(loadPackageParam,"com.xiaocao.p2p.entity.MineUserInfo",methodName, newValue)
         }
         kotlin.runCatching {
             val list = mutableListOf<Pair<kotlin.String, kotlin.Any>>()

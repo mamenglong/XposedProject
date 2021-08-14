@@ -47,12 +47,12 @@ class HookDy : HookPackage {
     }
 
     private fun hookLog(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
-        hookMethodAndPrintParams(loadPackageParam,"com.blankj.utilcode.util.LogUtils","b",Any::class.java)
+        this.hookMethodAndPrint(loadPackageParam,"com.blankj.utilcode.util.LogUtils","b",Any::class.java)
     }
 
     private fun hookVideoDetail(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
         fun hookVideoMethod(methodName: String,newValue: Any?){
-            hookAndReplaceMethodAndPrintResult(loadPackageParam,"com.niming.weipa.model.VideoInfo2",methodName, newValue)
+            hookAndReplaceMethod(loadPackageParam,"com.niming.weipa.model.VideoInfo2",methodName, newValue)
         }
         kotlin.runCatching {
             val list = mutableListOf<Pair<kotlin.String, kotlin.Any?>>()
@@ -65,9 +65,9 @@ class HookDy : HookPackage {
             list.forEach {
                 hookVideoMethod(it.first, it.second)
             }
-            hookAndReplaceMethodAndPrintResult(loadPackageParam,"com.niming.weipa.model.VideoDetails.AuthError","getKey", 1002)
-            hookAndReplaceMethodAndPrintResult(loadPackageParam,"com.niming.framework.net.Result","isOk", true)
-            hookAndReplaceMethodAndPrintResult(loadPackageParam,"com.shuyu.gsyvideoplayer.video.base.GSYVideoView","getDuration", 5*60*1000)
+            hookAndReplaceMethod(loadPackageParam,"com.niming.weipa.model.VideoDetails.AuthError","getKey", 1002)
+            hookAndReplaceMethod(loadPackageParam,"com.niming.framework.net.Result","isOk", true)
+            hookAndReplaceMethod(loadPackageParam,"com.shuyu.gsyvideoplayer.video.base.GSYVideoView","getDuration", 5*60*1000)
             XposedHelpers.findAndHookMethod("com.niming.weipa.model.VideoPlayTimeModel",
                 loadPackageParam.classLoader, "setTime", String::class.java,registerMethodHookCallback {
                     afterHookedMethod {

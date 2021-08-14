@@ -47,7 +47,7 @@ class HookFTQ : HookPackage {
     }
     private fun hookAndbackend(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
         fun hookUserInfoMethod(methodName: String, newValue: Any) {
-            hookAndReplaceMethodAndPrintResult(loadPackageParam,"andbackend.Andbackend",methodName, newValue)
+            hookAndReplaceMethod(loadPackageParam,"andbackend.Andbackend",methodName, newValue)
         }
         kotlin.runCatching {
             val list = mutableListOf<Pair<kotlin.String, kotlin.Any>>()
@@ -75,16 +75,16 @@ class HookFTQ : HookPackage {
         /**
          * 绑定弹窗 BindingDialog
          */
-        hookAndReplaceMethod(loadPackageParam,"com.vpn.code.activity.MainActivity","s2",Unit)
+        this.hookAndReplaceMethod(loadPackageParam,"com.vpn.code.activity.MainActivity","s2",Unit)
         /**
          * 公告弹窗 BulletinsDialog
          */
-        hookAndReplaceMethod(loadPackageParam,"com.vpn.code.activity.MainActivity","t2",Unit)
+        this.hookAndReplaceMethod(loadPackageParam,"com.vpn.code.activity.MainActivity","t2",Unit)
 
 
 
         fun hookUserInfoMethod(methodName: String, newValue: Any) {
-            hookAndReplaceMethodAndPrintResult(loadPackageParam,"com.vpn.code.activity.MainActivity",methodName, newValue)
+            hookAndReplaceMethod(loadPackageParam,"com.vpn.code.activity.MainActivity",methodName, newValue)
         }
         kotlin.runCatching {
             val list = mutableListOf<Pair<kotlin.String, kotlin.Any>>()
@@ -97,9 +97,9 @@ class HookFTQ : HookPackage {
             /**
              * hook LogUtil
              */
-            hookMethodAndPrintParams(loadPackageParam,"com.vpn.code.g.h","a",String::class.java.name)
-            hookMethodAndPrintParams(loadPackageParam,"com.vpn.code.g.h","c",String::class.java.name)
-            hookMethodAndPrintParams(loadPackageParam,"com.vpn.code.g.h","b",String::class.java,String::class.java)
+            this.hookMethodAndPrint(loadPackageParam,"com.vpn.code.g.h","a",String::class.java.name)
+            this.hookMethodAndPrint(loadPackageParam,"com.vpn.code.g.h","c",String::class.java.name)
+            this.hookMethodAndPrint(loadPackageParam,"com.vpn.code.g.h","b",String::class.java,String::class.java)
         }.onFailure {
             log("onFailure hookUserInfo:${it}", this)
         }

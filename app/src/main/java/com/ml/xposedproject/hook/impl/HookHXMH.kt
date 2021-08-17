@@ -1,11 +1,7 @@
-package com.ml.xposedproject.hook
+package com.ml.xposedproject.hook.impl
 
-import android.app.AndroidAppHelper
-import android.widget.Toast
+import com.ml.xposedproject.hook.base.HookPackage
 import com.ml.xposedproject.log
-import com.ml.xposedproject.registerMethodHookCallback
-import com.ml.xposedproject.tools.Config
-import de.robv.android.xposed.XposedHelpers
 import de.robv.android.xposed.callbacks.XC_LoadPackage
 
 /**
@@ -16,49 +12,57 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage
  * Package: com.ml.xposedproject.hook
  * Project: XposedProject
  */
-class HookHX : HookPackage {
-    override fun enableHook(): Boolean {
-        log(
-            "enableHook context:${AndroidAppHelper.currentPackageName()}  context:${context?.packageName}",
-            this
-        )
-        val enable = context?.let { Config.getBool(it, Config.KEYS.ENABLE_HX) } ?: false
-        log("enableHook enable:$enable", this)
-        return enable
-    }
-
+class HookHXMH : HookPackage {
+    override val label: String = "漫画"
     override fun getPackage(): String {
-        return "com.bepskq.hxgohq"
+        return "com.yayd.app.cn.edu"
     }
 
     override fun hookPackage(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
         log("hookPackage", this)
-        removeSplashAd(loadPackageParam)
         hookUserInfo(loadPackageParam)
-        hookVideoInfo(loadPackageParam)
+      /*  hookVideoInfo(loadPackageParam)
         hookPlayer(loadPackageParam)
         hookLivePlayer(loadPackageParam)
         hookRemoveNotice(loadPackageParam)
-        hookBannerInfo(loadPackageParam)
+        hookBannerInfo(loadPackageParam)*/
     }
     private fun hookUserInfo(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
         fun hookUserInfoMethod(methodName: String, newValue: Any) {
-            hookAndReplaceMethod(loadPackageParam,"com.bepskq.hxgohq.model.remote.User",methodName, newValue)
+            hookAndReplaceMethod(loadPackageParam,"com.heyshow.comic.watch.data.bean.UserInfoBean",methodName, newValue)
         }
         kotlin.runCatching {
             val list = mutableListOf<Pair<kotlin.String, kotlin.Any>>()
             list.apply {
-                add("getVipTime" to System.currentTimeMillis()+10000)
-                add("isVip" to true)
-                add("isRecharged" to true)
-                add("isDrag" to true)
-                add("isStuck" to true)
-                add("getGold" to 100)
+                add("getVipEndtime" to System.currentTimeMillis()+5*24*60*60*1000)
+                add("isVip" to 1)
+                add("getVip" to 1)
+                add("isRecharge" to 0)
+                add("getLevel" to 3)
+                add("getPhone" to "15803942356")
                 add("getUsername" to "tertwrte")
+                add("getDiscountEndtime" to System.currentTimeMillis()+5*24*60*60*1000)
+                add("getFreetime" to 11)
+                add("getBookBean" to 1000)
             }
             list.forEach {
                 hookUserInfoMethod(it.first, it.second)
             }
+            hookMethodAndPrint(loadPackageParam,"com.heyshow.comic.watch.data.bean.UserInfoBean",
+                "getId")
+            hookMethodAndPrint(loadPackageParam,"com.heyshow.comic.watch.data.bean.UserInfoBean",
+                "getDiamondBonusDayN")
+            hookMethodAndPrint(loadPackageParam,"com.heyshow.comic.watch.data.bean.UserInfoBean",
+                "getLevelName")
+            hookMethodAndPrint(loadPackageParam,"com.heyshow.comic.watch.data.bean.UserInfoBean",
+                "getPassword")
+            hookMethodAndPrint(loadPackageParam,"com.heyshow.comic.watch.data.bean.UserInfoBean",
+                "getRegisterTime")
+            hookAndReplaceMethodByCondition<Int>(loadPackageParam,"com.heyshow.comic.watch.data.bean.BaseResponse",
+                "getCode",100,{result,params->
+                    result==1009
+                })
+            
         }.onFailure {
             log("onFailure hookUserInfo:${it}", this)
         }
@@ -145,19 +149,6 @@ class HookHX : HookPackage {
         }.onFailure {
             log("onFailure hookUserInfo:${it}", this)
         }
-    }
-
-    private fun removeSplashAd(loadPackageParam: XC_LoadPackage.LoadPackageParam){
-        XposedHelpers.findAndHookMethod("com.bepskq.hxgohq.ui.activity.splash.SplashActivity",
-            loadPackageParam.classLoader,
-            "onResume",
-            registerMethodHookCallback {
-                afterHookedMethod{
-                    Toast.makeText(context,"跳过广告", Toast.LENGTH_SHORT).show()
-                    XposedHelpers.callMethod(it!!.thisObject,"toMainView")
-                }
-            })
-
     }
 
 }

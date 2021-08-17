@@ -51,15 +51,4 @@ object Config {
         values.put(key, boolean)
         context.contentResolver.insert(ConfigContentProvider.CONTENT_URI,values)
     }
-    object KEYS{
-        const val ENABLE_XYJMH = "ENABLE_XYJMH"
-        const val ENABLE_DY = "ENABLE_DY"
-        const val ENABLE_HX = "ENABLE_HX"
-        const val ENABLE_FTQ = "ENABLE_FTQ"
-        const val ENABLE_EXPORT = "ENABLE_EXPORT"
-        const val ENABLE_HXMH = "ENABLE_HXMH"
-        const val ENABLE_O_P_M_A = "ENABLE_O_P_M_A"
-        const val ENABLE_XCYS = "ENABLE_XCYS"
-        const val ENABLE_HLW = "ENABLE_HLW"
-    }
 }

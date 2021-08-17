@@ -2,6 +2,9 @@ package com.ml.xposedproject
 
 import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XC_MethodReplacement
+import de.robv.android.xposed.XposedHelpers
+import de.robv.android.xposed.callbacks.XC_LoadPackage
+import kotlin.jvm.Throws
 
 /**
  * Author: Menglong Ma
@@ -64,4 +67,9 @@ class MethodReplaceHookCallback: XC_MethodReplacement() {
         return callback.replaceHookedMethod(param)
     }
 
+}
+
+@Throws(ClassNotFoundException::class)
+fun XC_LoadPackage.LoadPackageParam.findClass(className:String): Class<*> {
+    return XposedHelpers.findClass(className,classLoader)
 }

@@ -1,18 +1,13 @@
-package com.ml.xposedproject.hook
+package com.ml.xposedproject.hook.base
 
 import android.app.AndroidAppHelper
 import android.content.Context
-import android.os.Build
 import android.widget.Toast
-import com.ml.xposedproject.MethodHookCallback
 import com.ml.xposedproject.log
 import com.ml.xposedproject.registerMethodHookCallback
-import com.ml.xposedproject.registerMethodReplaceHookCallback
-import de.robv.android.xposed.XC_MethodHook
-import de.robv.android.xposed.XposedBridge
+import com.ml.xposedproject.tools.Config
 import de.robv.android.xposed.XposedHelpers
 import de.robv.android.xposed.callbacks.XC_LoadPackage
-import kotlinx.coroutines.flow.asFlow
 
 /**
  * Author: Menglong Ma
@@ -22,9 +17,13 @@ import kotlinx.coroutines.flow.asFlow
  * Package: com.ml.xposedproject.hook
  * Project: XposedProject
  */
-interface HookPackage:BaseHookMethod {
+interface HookPackage: BaseHookMethod {
     val context: Context?
         get() = AndroidAppHelper.currentApplication()
+
+    val label:String
+    val key: String
+        get() = this.javaClass.simpleName
 
     fun canHook(loadPackageParam: XC_LoadPackage.LoadPackageParam): Boolean {
         val target = getPackage()
@@ -33,7 +32,15 @@ interface HookPackage:BaseHookMethod {
         return loadPackageParam.packageName == getPackage()
     }
 
-    fun enableHook(): Boolean
+    fun enableHook(): Boolean {
+        log(
+            "enableHook key:$key current:${AndroidAppHelper.currentPackageName()}  context:${context?.packageName}",
+            this
+        )
+        val enable = context?.let { Config.getBool(it,key) } ?: false
+        log("enableHook enable:$enable", this)
+        return enable
+    }
     fun getPackage(): String
     fun doHook(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
         hookApplication(loadPackageParam)

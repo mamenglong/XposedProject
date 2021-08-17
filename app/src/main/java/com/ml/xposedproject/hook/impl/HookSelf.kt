@@ -1,6 +1,7 @@
-package com.ml.xposedproject.hook
+package com.ml.xposedproject.hook.impl
 
 import com.ml.xposedproject.*
+import com.ml.xposedproject.hook.base.HookPackage
 import com.ml.xposedproject.test.TestFiled
 import com.ml.xposedproject.test.TestObject
 import de.robv.android.xposed.XposedHelpers
@@ -15,6 +16,7 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage
  * Project: XposedProject
  */
 class HookSelf : HookPackage {
+    override val label: String = "self"
     override fun enableHook(): Boolean {
         return true
     }

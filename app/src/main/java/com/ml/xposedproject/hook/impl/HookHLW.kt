@@ -1,9 +1,8 @@
-package com.ml.xposedproject.hook
+package com.ml.xposedproject.hook.impl
 
-import android.app.AndroidAppHelper
 import android.widget.Toast
 import com.ml.xposedproject.*
-import com.ml.xposedproject.tools.Config
+import com.ml.xposedproject.hook.base.HookPackage
 import de.robv.android.xposed.XposedHelpers
 import de.robv.android.xposed.callbacks.XC_LoadPackage
 import java.lang.reflect.Array
@@ -18,16 +17,7 @@ import java.lang.reflect.Array
  * Project: XposedProject
  */
 class HookHLW : HookPackage {
-    override fun enableHook(): Boolean {
-        log(
-            "enableHook context:${AndroidAppHelper.currentPackageName()}  context:${context?.packageName}",
-            this
-        )
-        val enable = context?.let { Config.getBool(it, Config.KEYS.ENABLE_HLW) } ?: false
-        log("enableHook enable:$enable", this)
-        return enable
-    }
-
+    override val label: String = "葫芦娃"
     override fun getPackage(): String {
         return "com.adult.zero"
     }

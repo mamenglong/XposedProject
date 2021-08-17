@@ -1,9 +1,8 @@
-package com.ml.xposedproject.hook
+package com.ml.xposedproject.hook.impl
 
-import android.app.AndroidAppHelper
 import android.widget.Toast
 import com.ml.xposedproject.*
-import com.ml.xposedproject.tools.Config
+import com.ml.xposedproject.hook.base.HookPackage
 import de.robv.android.xposed.XposedHelpers
 import de.robv.android.xposed.callbacks.XC_LoadPackage
 
@@ -17,16 +16,7 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage
  * Project: XposedProject
  */
 class HookXCYS : HookPackage {
-    override fun enableHook(): Boolean {
-        log(
-            "enableHook context:${AndroidAppHelper.currentPackageName()}  context:${context?.packageName}",
-            this
-        )
-        val enable = context?.let { Config.getBool(it, Config.KEYS.ENABLE_XCYS) } ?: false
-        log("enableHook enable:$enable", this)
-        return enable
-    }
-
+    override val label: String = "星辰影视"
     override fun getPackage(): String {
         return "com.xingchen.xcfilms"
     }

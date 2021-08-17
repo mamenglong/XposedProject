@@ -1,14 +1,10 @@
-package com.ml.xposedproject.hook
+package com.ml.xposedproject.hook.impl
 
-import android.app.AndroidAppHelper
 import android.content.Context
 import com.ml.xposedproject.*
-import com.ml.xposedproject.test.TestFiled
-import com.ml.xposedproject.test.TestObject
-import com.ml.xposedproject.tools.Config
+import com.ml.xposedproject.hook.base.HookPackage
 import de.robv.android.xposed.XposedHelpers
 import de.robv.android.xposed.callbacks.XC_LoadPackage
-import de.robv.android.xposed.XC_MethodHook.MethodHookParam
 
 import de.robv.android.xposed.XC_MethodHook
 
@@ -24,16 +20,7 @@ import de.robv.android.xposed.XC_MethodHook
  * Project: XposedProject
  */
 class HookOnePlusMultiApp : HookPackage {
-    override fun enableHook(): Boolean {
-        log(
-            "enableHook context:${AndroidAppHelper.currentPackageName()}  context:${context?.packageName}",
-            this
-        )
-        val enable = context?.let { Config.getBool(it, Config.KEYS.ENABLE_O_P_M_A) } ?: false
-        log("enableHook enable:$enable", this)
-        return enable
-    }
-
+    override val label: String = "一加多开"
     override fun getPackage(): String {
         return "com.android.settings"
     }

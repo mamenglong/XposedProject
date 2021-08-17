@@ -1,4 +1,4 @@
-package com.ml.xposedproject.hook
+package com.ml.xposedproject.hook.base
 
 import com.ml.xposedproject.log
 import com.ml.xposedproject.registerMethodHookCallback
@@ -249,6 +249,58 @@ interface BaseHookMethod {
                         it?.args?.set(index, newValue)
                         log(
                             "hookMethodParams $className.$methodName[${it?.args?.size}]($oldParam)[$index]($newValue) return:${it?.result}",
+                            this@BaseHookMethod
+                        )
+                    }
+                })
+            log("hookMethodParams onSuccess $className.$methodName", this@BaseHookMethod)
+        }.onFailure {
+            log(
+                "hookMethodParams onFailure $className.$methodName ->:${it}",
+                this@BaseHookMethod
+            )
+        }
+
+
+    }
+    /**
+     * hook 参数
+     */
+    fun hookMethodParams(
+        loadPackageParam: XC_LoadPackage.LoadPackageParam,
+        className: String,
+        methodName: String,
+        newValues: List<Any?>,
+        vararg params: Any
+    ) {
+        val p = params.joinToString {
+            when (it) {
+                is String -> it
+                is Class<*> -> it.name
+                else -> "$it"
+            }
+        }
+        kotlin.runCatching {
+            XposedHelpers.findAndHookMethod(className,
+                loadPackageParam.classLoader, methodName, *params, registerMethodHookCallback {
+                    beforeHookedMethod {
+                        val oldParam = buildString {
+                            params.forEachIndexed { index, any ->
+                                append("${it?.args?.get(index)}, ")
+                            }
+                        }
+                        newValues.forEachIndexed { index, any ->
+                            any?.apply {
+                                it?.args?.set(index, any)
+                            }
+                        }
+                        val newParam = buildString {
+                            params.forEachIndexed { index, any ->
+                                append("${it?.args?.get(index)}, ")
+                            }
+                        }
+                        log(
+                            "hookMethodParams $className.$methodName[${it?.args?.size}]($oldParam)($newParam) return:${it?.result}",
                             this@BaseHookMethod
                         )
                     }

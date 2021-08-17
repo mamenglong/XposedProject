@@ -16,6 +16,7 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "String", "buildTime", "\"${buildTime()}\""
+        buildConfigField "long", "buildTimeStamp", "${buildTimeStamp()}"
     }
     kotlinOptions {
         jvmTarget = "1.8"
@@ -87,6 +88,9 @@ android {
 
 def buildTime(){
     return new Date().format("yyyy-MM-dd HH:mm:ss",TimeZone.getDefault())
+}
+def buildTimeStamp(){
+    return new Date().time
 }
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])

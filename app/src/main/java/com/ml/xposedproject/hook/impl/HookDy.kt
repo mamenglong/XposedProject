@@ -1,12 +1,11 @@
-package com.ml.xposedproject.hook
+package com.ml.xposedproject.hook.impl
 
 import android.app.Activity
-import android.app.AndroidAppHelper
+import com.ml.xposedproject.hook.base.HookPackage
 import com.ml.xposedproject.log
 import com.ml.xposedproject.registerMethodHookCallback
 import com.ml.xposedproject.registerMethodReplaceHookCallback
 import com.ml.xposedproject.showToast
-import com.ml.xposedproject.tools.Config
 import de.robv.android.xposed.XC_MethodReplacement
 import de.robv.android.xposed.XposedHelpers
 import de.robv.android.xposed.callbacks.XC_LoadPackage
@@ -20,16 +19,7 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage
  * Project: XposedProject
  */
 class HookDy : HookPackage {
-    override fun enableHook(): Boolean {
-        log(
-            "enableHook context:${AndroidAppHelper.currentPackageName()}  context:${context?.packageName}",
-            this
-        )
-        val enable = context?.let { Config.getBool(it, Config.KEYS.ENABLE_DY) } ?: false
-        log("enableHook enable:$enable", this)
-        return enable
-    }
-
+    override val label: String = "抖音"
     override fun getPackage(): String {
         return "com.user.ccnineonepros.android"
     }

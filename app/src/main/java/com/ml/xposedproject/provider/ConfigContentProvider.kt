@@ -12,6 +12,7 @@ class ConfigContentProvider : ContentProvider() {
     private lateinit var kv: MMKV
 
     companion object {
+        var isEnable = false
         const val AUTHORITIES = "com.ml.xposedproject.provider.ConfigContentProvider"
         val CONTENT_URI = Uri.parse("content://$AUTHORITIES")
     }
@@ -98,6 +99,7 @@ class ConfigContentProvider : ContentProvider() {
     override fun onCreate(): Boolean {
         Log.d("ConfigContentProvider", "onCreate")
         MMKV.initialize(context)
+        isEnable = true
         kv = MMKV.defaultMMKV()
         return true
     }

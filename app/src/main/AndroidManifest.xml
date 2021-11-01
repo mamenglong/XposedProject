@@ -10,6 +10,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <service
+            android:name=".service.AliveService"
+            android:enabled="true"
+            android:exported="true"></service>
+
         <provider
             android:name=".provider.ConfigContentProvider"
             android:authorities="com.ml.xposedproject.provider.ConfigContentProvider"

@@ -28,12 +28,14 @@ object HookFactory {
         hookList.add(HookXCYS())
         hookList.add(HookHLW())
         hookList.add(HookZSCF())
+        hookList.add(HookWYY())
     }
     fun doHook(loadPackageParam: XC_LoadPackage.LoadPackageParam){
         log("doHook hookList size :${hookList.size}",this)
         hookList.forEach {
-            if (it.canHook(loadPackageParam))
+            if (it.canHook(loadPackageParam)) {
                 it.doHook(loadPackageParam)
+            }
         }
     }
     fun register(hook: HookPackage){

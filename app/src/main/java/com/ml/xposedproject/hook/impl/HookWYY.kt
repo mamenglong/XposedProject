@@ -1,14 +1,13 @@
 package com.ml.xposedproject.hook.impl
 
 import android.content.Context
+import android.os.Bundle
 import com.ml.xposedproject.*
 import com.ml.xposedproject.hook.base.HookPackage
 import de.robv.android.xposed.XposedHelpers
 import de.robv.android.xposed.callbacks.XC_LoadPackage
 
 import de.robv.android.xposed.XC_MethodHook
-
-
 
 
 /**
@@ -27,19 +26,49 @@ class HookWYY : HookPackage {
 
     override fun hookPackage(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
         log("hookPackage ${loadPackageParam.packageName}", this)
-        kotlin.runCatching {
-            XposedHelpers.findAndHookMethod(loadPackageParam.classLoader.loadClass("com.netease.cloudmusic.meta.virtual.UserPrivilege"),
-                "isBlackVip",
-                Boolean::class.java,
-                object : XC_MethodHook() {
-                    @Throws(Throwable::class)
-                    override fun afterHookedMethod(param: MethodHookParam) {
-                        param.result = true
-                    }
-                })
-        }.onFailure {
-            log("hookSelf onFailure:${it.message}", this)
-        }
+        hookUserInfo(loadPackageParam)
+    }
 
+    private fun hookUserInfo(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
+        fun hookUserInfoMethod(methodName: String, newValue: Any) {
+            hookAndReplaceMethod(
+                loadPackageParam,
+                "com.netease.cloudmusic.meta.virtual.UserPrivilege",
+                methodName,
+                newValue
+            )
+        }
+        kotlin.runCatching {
+            val list = mutableListOf<Pair<kotlin.String, kotlin.Any>>()
+            list.apply {
+                add("isBlackVip" to true)
+                add("isWhateverVip" to true)
+                add("isAnnualVip" to true)
+                add("isLuxuryMusicPackage" to true)
+                add("isWhateverMusicPackage" to true)
+                add("hasBlackVipRightsForProfileList" to true)
+                add("hasMusicPackageRightsForProfileList" to true)
+                add("getRedVipLevel" to 11)
+            }
+            list.forEach {
+                hookUserInfoMethod(it.first, it.second)
+            }
+            findAndHookMethod(loadPackageParam,
+                "com.netease.cloudmusic.activity.LoadingActivity",
+                "onCreate",
+                registerMethodHookCallback {
+                    afterHookedMethod {
+                        showToast("跳过广告")
+                        val maina = XposedHelpers.findClass("com.netease.cloudmusic.activity.MainActivity",loadPackageParam.classLoader)
+                        XposedHelpers.callStaticMethod(maina,"G9",it?.thisObject,null,null)
+                        XposedHelpers.callMethod(it?.thisObject, "finish")
+                    }
+                },
+                Bundle::class.java
+            )
+
+        }.onFailure {
+            log("onFailure hookUserInfo:${it}", this)
+        }
     }
 }

@@ -29,6 +29,7 @@ object HookFactory {
         hookList.add(HookHLW())
         hookList.add(HookZSCF())
         hookList.add(HookWYY())
+        hookList.add(HookMMSH())
     }
     fun doHook(loadPackageParam: XC_LoadPackage.LoadPackageParam){
         log("doHook hookList size :${hookList.size}",this)

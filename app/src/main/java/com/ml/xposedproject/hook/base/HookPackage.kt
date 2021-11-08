@@ -9,7 +9,7 @@ import com.ml.xposedproject.BuildConfig
 import com.ml.xposedproject.log
 import com.ml.xposedproject.provider.ConfigContentProvider
 import com.ml.xposedproject.registerMethodHookCallback
-import com.ml.xposedproject.service.AliveService
+import com.ml.xposedproject.service.AliveActivity
 import com.ml.xposedproject.tools.Config
 import de.robv.android.xposed.XposedHelpers
 import de.robv.android.xposed.callbacks.XC_LoadPackage
@@ -62,6 +62,13 @@ interface HookPackage : BaseHookMethod {
                 loadPackageParam.classLoader, "onCreate", registerMethodHookCallback {
                     afterHookedMethod {
                         val app = it!!.thisObject as Context
+                        log("hook isEnable:${ConfigContentProvider.isEnable}", this@HookPackage)
+                        if(ConfigContentProvider.isEnable.not()){
+                            val intent = Intent()
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            intent.setComponent(ComponentName(BuildConfig.APPLICATION_ID,AliveActivity::class.java.name))
+                            app.startActivity(intent)
+                        }
                         if (enableHook()) {
                             hookPackage(loadPackageParam)
                         }

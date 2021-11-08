@@ -10,10 +10,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <service
-            android:name=".service.AliveService"
+        <activity
+            android:theme="@style/AppTheme"
+            android:name=".service.AliveActivity"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true"></activity>
 
         <provider
             android:name=".provider.ConfigContentProvider"
@@ -21,7 +22,9 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".MainActivity">
+        <activity
+            android:exported="true"
+            android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

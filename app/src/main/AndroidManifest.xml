@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:theme="@style/AppTheme"
+            android:theme="@style/AppTheme.Tran"
             android:name=".service.AliveActivity"
             android:enabled="true"
             android:exported="true"></activity>

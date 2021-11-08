@@ -1,6 +1,7 @@
 package com.ml.xposedproject
 
 import android.app.AndroidAppHelper
+import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import de.robv.android.xposed.XC_MethodHook
@@ -22,4 +23,8 @@ fun log(msg: String, clazz: Any? = null){
 
 fun showToast(msg: String){
     Toast.makeText(AndroidAppHelper.currentApplication(),msg,Toast.LENGTH_SHORT).show()
+}
+
+fun Context.showToast(msg: String){
+    Toast.makeText(this,msg,Toast.LENGTH_SHORT).show()
 }

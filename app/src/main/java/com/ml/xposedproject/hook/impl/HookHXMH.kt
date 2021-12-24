@@ -18,7 +18,7 @@ class HookHXMH : HookPackage {
         return "com.yayd.app.cn.edu"
     }
 
-    override fun hookPackage(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
+    override fun hookCurrentPackage(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
         log("hookPackage", this)
         hookUserInfo(loadPackageParam)
       /*  hookVideoInfo(loadPackageParam)

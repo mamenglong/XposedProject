@@ -21,7 +21,7 @@ class HookXCYS : HookPackage {
         return "com.xingchen.xcfilms"
     }
 
-    override fun hookPackage(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
+    override fun hookCurrentPackage(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
         log("hookPackage ${loadPackageParam.packageName}", this)
         kotlin.runCatching {
             hookUserInfo(loadPackageParam)

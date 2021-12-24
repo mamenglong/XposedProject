@@ -21,7 +21,7 @@ class HookHX : HookPackage {
         return "com.bepskq.hxgohq"
     }
 
-    override fun hookPackage(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
+    override fun hookCurrentPackage(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
         log("hookPackage", this)
         removeSplashAd(loadPackageParam)
         hookUserInfo(loadPackageParam)

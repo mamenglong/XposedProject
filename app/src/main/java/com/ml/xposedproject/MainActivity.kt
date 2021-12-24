@@ -37,6 +37,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initHookView() {
+        Config.initMain(this)
         viewBinding.tvHookResult.text = getHook()
         viewBinding.tvHookResult.isChecked = isActive()
         initView()
@@ -75,9 +76,13 @@ class MainActivity : AppCompatActivity() {
                 holder.binding.mSwitchCompat.apply {
                     text = dataItem.label
                     setOnCheckedChangeListener { buttonView, isChecked ->
-                        Config.setBool(this@MainActivity, dataItem.key, isChecked)
+                        if (isActive()) {
+                            Config.setBool(this@MainActivity,dataItem.key, isChecked)
+                        }else{
+                            showToast("请先激活插件")
+                        }
                     }
-                    isChecked = Config.getBool(this@MainActivity, dataItem.key)
+                    isChecked = Config.getBool(this@MainActivity,dataItem.key)
                 }
             }
 
@@ -111,13 +116,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getHook(): String {
-        return "未hook"
+        return if (isActive()) "模块已启用" else "未hook"
     }
 
     private fun isActive(): Boolean = false
-    private fun hookMe(msg: String) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
-    }
-
+    
     inner class ViewHolder(val binding: ItemHookListBinding) : RecyclerView.ViewHolder(binding.root)
 }

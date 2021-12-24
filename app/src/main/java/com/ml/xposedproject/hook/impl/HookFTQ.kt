@@ -20,7 +20,7 @@ class HookFTQ : HookPackage {
     override fun getPackage(): String {
         return "com.fotiaoqiang.android.vpn"
     }
-    override fun hookPackage(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
+    override fun hookCurrentPackage(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
         log("hookPackage :${loadPackageParam.packageName}", this)
         kotlin.runCatching {
             XposedHelpers.findAndHookMethod("com.vpn.code.g.f",

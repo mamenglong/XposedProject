@@ -24,7 +24,7 @@ class HookWYY : HookPackage {
         return "com.netease.cloudmusic"
     }
 
-    override fun hookPackage(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
+    override fun hookCurrentPackage(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
         log("hookPackage ${loadPackageParam.packageName}", this)
         hookUserInfo(loadPackageParam)
     }

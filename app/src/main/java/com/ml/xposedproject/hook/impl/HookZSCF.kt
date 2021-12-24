@@ -19,7 +19,7 @@ class HookZSCF : HookPackage {
         return "com.cheese.stock"
     }
 
-    override fun hookPackage(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
+    override fun hookCurrentPackage(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
         log("hookPackage ${loadPackageParam.packageName}", this)
         kotlin.runCatching {
             hookUserInfo(loadPackageParam, "com.cheese.business_layer.event.PayEvent")

@@ -4,6 +4,8 @@ import com.ml.xposedproject.*
 import com.ml.xposedproject.hook.base.HookPackage
 import com.ml.xposedproject.test.TestFiled
 import com.ml.xposedproject.test.TestObject
+import com.ml.xposedproject.tools.Config
+import de.robv.android.xposed.XSharedPreferences
 import de.robv.android.xposed.XposedHelpers
 import de.robv.android.xposed.callbacks.XC_LoadPackage
 
@@ -17,26 +19,16 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage
  */
 class HookSelf : HookPackage {
     override val label: String = "self"
-    override fun enableHook(): Boolean {
+    override fun isEnableCurrentPackageHook(): Boolean {
         return true
     }
 
     override fun getPackage(): String {
         return BuildConfig.APPLICATION_ID
     }
-
-    override fun hookPackage(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
+    override fun hookCurrentPackage(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
         log("hookPackage ${loadPackageParam.packageName}", this)
         kotlin.runCatching {
-            XposedHelpers.findAndHookMethod(
-                MainActivity::class.java.name,
-                loadPackageParam.classLoader,
-                "getHook", registerMethodReplaceHookCallback {
-                    replaceHookedMethod {
-                        log("${it?.method}",this@HookSelf)
-                        return@replaceHookedMethod "模块已启用"
-                    }
-                })
             XposedHelpers.findAndHookMethod(
                 MainActivity::class.java.name,
                 loadPackageParam.classLoader,
@@ -46,17 +38,6 @@ class HookSelf : HookPackage {
                         return@replaceHookedMethod true
                     }
                 })
-            XposedHelpers.findAndHookMethod(
-                MainActivity::class.java.name,
-                loadPackageParam.classLoader,
-                "onResume", registerMethodHookCallback {
-                    afterHookedMethod {
-                        log("${it?.method}",this@HookSelf)
-                        XposedHelpers.callMethod(it?.thisObject, "hookMe", "hahahh")
-                        it?.result  = null
-                    }
-                })
-
             this.hookMethodAndPrint(loadPackageParam,TestObject::class.java.name,"testHook",String::class.java)
             setObjectField(loadPackageParam,TestObject::class.java.name,"testFiled","TestObject.class",true)
             setObjectField(loadPackageParam,TestFiled::class.java.name,"testFiled","TestFiled.class")

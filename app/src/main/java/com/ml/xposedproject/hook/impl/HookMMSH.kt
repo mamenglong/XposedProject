@@ -20,7 +20,7 @@ class HookMMSH : HookPackage {
         return "cn.imyfone.famiguard.parent"
     }
 
-    override fun hookPackage(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
+    override fun hookCurrentPackage(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
         log("hookPackage", this)
         hookUserInfo(loadPackageParam)
     }

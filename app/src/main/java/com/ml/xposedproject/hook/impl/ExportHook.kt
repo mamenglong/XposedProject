@@ -17,7 +17,7 @@ class ExportHook: HookPackage {
         return "com.user.ccnineonepros.android"//context?.let { Config.getValue(it, Config.KEYS.ENABLE_EXPORT,"") }?:""
     }
 
-    override fun hookPackage(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
+    override fun hookCurrentPackage(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
         
     }
 }

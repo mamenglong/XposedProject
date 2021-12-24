@@ -4,6 +4,7 @@ import com.ml.xposedproject.DataItem
 import com.ml.xposedproject.hook.base.HookPackage
 import com.ml.xposedproject.hook.impl.*
 import com.ml.xposedproject.log
+import de.robv.android.xposed.IXposedHookLoadPackage
 import de.robv.android.xposed.callbacks.XC_LoadPackage
 
 /**
@@ -16,6 +17,8 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage
  */
 object HookFactory {
     private val hookList = mutableListOf<HookPackage>()
+    private val mapHook = mutableMapOf<String,HookPackage>()
+
     init {
         hookList.add(HookSelf())
         hookList.add(HookOnePlusMultiApp())
@@ -30,14 +33,13 @@ object HookFactory {
         hookList.add(HookZSCF())
         hookList.add(HookWYY())
         hookList.add(HookMMSH())
-    }
-    fun doHook(loadPackageParam: XC_LoadPackage.LoadPackageParam){
-        log("doHook hookList size :${hookList.size}",this)
         hookList.forEach {
-            if (it.canHook(loadPackageParam)) {
-                it.doHook(loadPackageParam)
-            }
+            mapHook[it.getPackage()] = it
         }
+    }
+    fun handleLoadPackage(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
+        log("handleLoadPackage listSize :${hookList.size}",this)
+        mapHook.get(loadPackageParam.packageName)?.handleLoadPackage(loadPackageParam)
     }
     fun register(hook: HookPackage){
         hookList.add(hook)
@@ -51,4 +53,5 @@ object HookFactory {
         }
         return list
     }
+
 }

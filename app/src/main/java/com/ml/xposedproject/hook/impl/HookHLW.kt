@@ -22,7 +22,7 @@ class HookHLW : HookPackage {
         return "com.adult.zero"
     }
 
-    override fun hookPackage(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
+    override fun hookCurrentPackage(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
         log("hookPackage ${loadPackageParam.packageName}", this)
         kotlin.runCatching {
             hookUserInfo(loadPackageParam, "com.hlw.movie.commonservice.cache.entity.SessionUser")

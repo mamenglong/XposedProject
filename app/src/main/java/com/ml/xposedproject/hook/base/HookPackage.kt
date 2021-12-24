@@ -30,62 +30,72 @@ interface HookPackage : BaseHookMethod {
     val key: String
         get() = this.javaClass.simpleName
 
-    fun canHook(loadPackageParam: XC_LoadPackage.LoadPackageParam): Boolean {
+    fun isCurrentPackage(loadPackageParam: XC_LoadPackage.LoadPackageParam): Boolean {
         val target = getPackage()
         val src = loadPackageParam.packageName
-        log("canHook  can:${target == src} target:$target source:$src", this)
+        log("isCurrentPackage is:${target == src} target:$target source:$src", this)
         return loadPackageParam.packageName == getPackage()
     }
 
-    fun enableHook(): Boolean {
+    fun isEnableCurrentPackageHook(): Boolean {
         log(
-            "enableHook key:$key current:${AndroidAppHelper.currentPackageName()}  context:${context?.packageName}",
+            "isEnableCurrentPackageHook key:$key current:${AndroidAppHelper.currentPackageName()}  context:${context?.packageName}",
             this
         )
-        val enable = context?.let { Config.getBool(it,key) } ?: false
-        log("enableHook enable:$enable", this)
+        val enable = context?.let { Config.getBool(it, key) } ?: false
+        log("isEnableCurrentPackageHook key:$key enable:$enable", this)
         return enable
     }
+
     fun getPackage(): String
-    fun doHook(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
+    fun execHook(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
         hookApplication(loadPackageParam)
     }
 
-    fun hookPackage(loadPackageParam: XC_LoadPackage.LoadPackageParam)
+    fun hookCurrentPackage(loadPackageParam: XC_LoadPackage.LoadPackageParam)
 
     /**
      *
      */
-    fun hookApplication(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
+    private fun hookApplication(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
         kotlin.runCatching {
             XposedHelpers.findAndHookMethod("android.app.Application",
                 loadPackageParam.classLoader, "onCreate", registerMethodHookCallback {
                     afterHookedMethod {
                         val app = it!!.thisObject as Context
-                        log("hook isEnable:${ConfigContentProvider.isEnable}", this@HookPackage)
+                        val label = loadPackageParam.appInfo.loadLabel(app.packageManager)
+                        log("hookApplication($label) processName:${loadPackageParam.processName}" +
+                                " isFirstApplication:${loadPackageParam.isFirstApplication}",this@HookPackage)
                         if(ConfigContentProvider.isEnable.not()){
                             val intent = Intent()
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                            intent.setComponent(ComponentName(BuildConfig.APPLICATION_ID,AliveActivity::class.java.name))
+                            intent.setComponent(ComponentName(BuildConfig.APPLICATION_ID,
+                                AliveActivity::class.java.name))
                             app.startActivity(intent)
                         }
-                        if (enableHook()) {
-                            hookPackage(loadPackageParam)
+                        if (loadPackageParam.isFirstApplication&&loadPackageParam.processName==getPackage()) {
+                            Toast.makeText(
+                                app,
+                                "Enable:${isEnableCurrentPackageHook()} ${label}\t\n${loadPackageParam.packageName} ",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
-
-                        Toast.makeText(
-                            app,
-                            "hookEnable:${enableHook()} ${loadPackageParam.appInfo.loadLabel(app.packageManager)}\n${loadPackageParam.packageName} ",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        if (isEnableCurrentPackageHook()) {
+                            hookCurrentPackage(loadPackageParam)
+                        }
                     }
                 })
-
         }.onFailure {
             log("hook onCreate onFailure:${it.message}", this)
         }
 
     }
 
+    fun handleLoadPackage(lpparam: XC_LoadPackage.LoadPackageParam) {
+        log("handleLoadPackage enable ${key}", this)
+        if (isCurrentPackage(loadPackageParam = lpparam)) {
+            execHook(lpparam)
+        }
+    }
 
 }

@@ -20,7 +20,7 @@ class HookXYJMH : HookPackage {
     override fun getPackage(): String {
         return "com.xjlmh.classic"
     }
-    override fun hookPackage(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
+    override fun hookCurrentPackage(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
         log("hookPackage $loadPackageParam", this)
         kotlin.runCatching {
             XposedHelpers.findAndHookMethod("com.maibaapp.module.main.bean.user.NewElfUserInfoDetailBean",

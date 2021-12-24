@@ -25,21 +25,16 @@ class HookOnePlusMultiApp : HookPackage {
         return "com.android.settings"
     }
 
-    override fun hookPackage(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
+    override fun hookCurrentPackage(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
         log("hookPackage ${loadPackageParam.packageName}", this)
         kotlin.runCatching {
-            XposedHelpers.findAndHookMethod(loadPackageParam.classLoader.loadClass("com.oneplus.settings.apploader.OPApplicationLoader"),
-                "multiAppPackageExcludeFilter",
+            hookAndReplaceMethod(loadPackageParam,"com.oneplus.settings.apploader.OPApplicationLoader","multiAppPackageExcludeFilter",
+                true,
                 Context::class.java,
                 String::class.java,
-                object : XC_MethodHook() {
-                    @Throws(Throwable::class)
-                    override fun afterHookedMethod(param: MethodHookParam) {
-                        param.result = true
-                    }
-                })
+                )
         }.onFailure {
-            log("hookSelf onFailure:${it.message}", this)
+            log("hookCurrentPackage onFailure:${it.message}", this)
         }
 
     }

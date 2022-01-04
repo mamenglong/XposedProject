@@ -16,9 +16,9 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage
  * Project: XposedProject
  */
 class HookXCYS : HookPackage {
-    override val label: String = "星辰影视"
+    override val label: String = "追风视频"
     override fun getPackage(): String {
-        return "com.xingchen.xcfilms"
+        return "com.huli.hlfilms"
     }
 
     override fun hookCurrentPackage(loadPackageParam: XC_LoadPackage.LoadPackageParam) {

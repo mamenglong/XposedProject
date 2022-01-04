@@ -66,13 +66,13 @@ interface HookPackage : BaseHookMethod {
                         val label = loadPackageParam.appInfo.loadLabel(app.packageManager)
                         log("hookApplication($label) processName:${loadPackageParam.processName}" +
                                 " isFirstApplication:${loadPackageParam.isFirstApplication}",this@HookPackage)
-                        if(ConfigContentProvider.isEnable.not()){
+                      /*  if(ConfigContentProvider.isEnable.not()){
                             val intent = Intent()
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                             intent.setComponent(ComponentName(BuildConfig.APPLICATION_ID,
                                 AliveActivity::class.java.name))
                             app.startActivity(intent)
-                        }
+                        }*/
                         if (loadPackageParam.isFirstApplication&&loadPackageParam.processName==getPackage()) {
                             Toast.makeText(
                                 app,

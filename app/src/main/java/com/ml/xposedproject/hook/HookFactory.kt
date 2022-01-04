@@ -4,7 +4,6 @@ import com.ml.xposedproject.DataItem
 import com.ml.xposedproject.hook.base.HookPackage
 import com.ml.xposedproject.hook.impl.*
 import com.ml.xposedproject.log
-import de.robv.android.xposed.IXposedHookLoadPackage
 import de.robv.android.xposed.callbacks.XC_LoadPackage
 
 /**
@@ -33,6 +32,7 @@ object HookFactory {
         hookList.add(HookZSCF())
         hookList.add(HookWYY())
         hookList.add(HookMMSH())
+        hookList.add(HookICBC())
         hookList.forEach {
             mapHook[it.getPackage()] = it
         }

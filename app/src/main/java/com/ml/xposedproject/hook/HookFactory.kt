@@ -33,6 +33,7 @@ object HookFactory {
         hookList.add(HookWYY())
         hookList.add(HookMMSH())
         hookList.add(HookICBC())
+        hookList.add(HookGreen())
         hookList.forEach {
             mapHook[it.getPackage()] = it
         }

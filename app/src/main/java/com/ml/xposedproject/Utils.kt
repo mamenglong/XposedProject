@@ -28,3 +28,9 @@ fun showToast(msg: String){
 fun Context.showToast(msg: String){
     Toast.makeText(this,msg,Toast.LENGTH_SHORT).show()
 }
+fun taichi(block:()->Unit):Boolean{
+    if (BuildConfig.FLAVOR=="taichi"){
+        block.invoke()
+    }
+    return BuildConfig.FLAVOR=="taichi"
+}

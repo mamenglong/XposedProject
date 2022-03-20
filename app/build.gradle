@@ -48,6 +48,15 @@ android {
             signingConfig signingConfigs.release
         }
     }
+    flavorDimensions "app"
+    productFlavors {
+        normal{
+
+        }
+        taichi {
+            applicationId "com.mx.vpnjc"
+        }
+    }
    /* applicationVariants.all { variant ->
         // 打包完成后复制到的目录
         def outputFileDir = "${project.projectDir.absolutePath}/${variant.buildType.name}/${variant.flavorName}/${variant.versionName}"

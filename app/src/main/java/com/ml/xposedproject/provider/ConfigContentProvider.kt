@@ -5,6 +5,7 @@ import android.content.ContentValues
 import android.database.Cursor
 import android.net.Uri
 import android.util.Log
+import com.ml.xposedproject.BuildConfig
 import com.ml.xposedproject.hook.base.HookPackage
 import com.ml.xposedproject.service.AliveActivity
 import com.tencent.mmkv.MMKV
@@ -15,7 +16,7 @@ class ConfigContentProvider : ContentProvider() {
 
     companion object {
         var isEnable = false
-        const val AUTHORITIES = "com.ml.xposedproject.provider.ConfigContentProvider"
+        const val AUTHORITIES = "${BuildConfig.APPLICATION_ID}.provider.ConfigContentProvider"
         val CONTENT_URI = Uri.parse("content://$AUTHORITIES")
     }
 

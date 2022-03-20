@@ -22,14 +22,24 @@
         android:layoutDirection="rtl"
         android:layout_margin="?dialogPreferredPadding"
         app:layout_constraintTop_toTopOf="parent" />
-
+    <CheckBox
+        android:id="@+id/tv_active_taichi"
+        android:clickable="false"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="去太极激活"
+        android:layoutDirection="rtl"
+        android:layout_margin="?dialogPreferredPadding"
+        app:layout_constraintTop_toBottomOf="@id/tv_hook_result"
+         />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/mRecyclerView"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:spanCount="2"
         tools:itemCount="10"
         tools:listitem="@layout/item_hook_list"
-        app:layout_constraintTop_toBottomOf="@id/tv_hook_result"
+        app:layout_constraintTop_toBottomOf="@id/tv_active_taichi"
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

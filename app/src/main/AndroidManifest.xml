@@ -20,7 +20,7 @@
             android:multiprocess="true"
             android:name=".provider.ConfigContentProvider"
             android:process=":xp"
-            android:authorities="com.ml.xposedproject.provider.ConfigContentProvider"
+            android:authorities="${applicationId}.provider.ConfigContentProvider"
             android:enabled="true"
             android:exported="true" />
 

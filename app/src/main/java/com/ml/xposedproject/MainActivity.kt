@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ml.xposedproject.databinding.ActivityMainBinding
 import com.ml.xposedproject.databinding.ItemHookListBinding
 import com.ml.xposedproject.hook.HookFactory
+import com.ml.xposedproject.taichi.TaiChiUtil
 import com.ml.xposedproject.test.TestFiled
 import com.ml.xposedproject.test.TestObject
 import com.ml.xposedproject.tools.Config
@@ -40,6 +41,13 @@ class MainActivity : AppCompatActivity() {
         Config.initMain(this)
         viewBinding.tvHookResult.text = getHook()
         viewBinding.tvHookResult.isChecked = isActive()
+        taichi {
+            viewBinding.tvActiveTaichi.visibility = View.VISIBLE
+            viewBinding.tvActiveTaichi.isChecked = TaiChiUtil.isExpModuleActive(this)
+            viewBinding.tvActiveTaichi.setOnClickListener {
+                TaiChiUtil.activeModule(this,packageName)
+            }
+        }
         initView()
         viewBinding.btnTest.setOnClickListener {
             TestObject.testHook("${System.currentTimeMillis()}")
@@ -79,6 +87,9 @@ class MainActivity : AppCompatActivity() {
                         if (isActive()) {
                             Config.setBool(this@MainActivity,dataItem.key, isChecked)
                         }else{
+                            if (BuildConfig.DEBUG){
+                                Config.setBool(this@MainActivity,dataItem.key, isChecked)
+                            }
                             showToast("请先激活插件")
                         }
                     }

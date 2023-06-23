@@ -1,6 +1,7 @@
 package com.ml.xposedproject.hook.impl
 
 import android.widget.Toast
+import com.google.auto.service.AutoService
 import com.ml.xposedproject.hook.base.HookPackage
 import com.ml.xposedproject.log
 import com.ml.xposedproject.registerMethodHookCallback
@@ -15,6 +16,7 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage
  * Package: com.ml.xposedproject.hook
  * Project: XposedProject
  */
+@AutoService(HookPackage::class)
 class HookHX : HookPackage {
     override val label: String = "红杏"
     override fun getPackage(): String {

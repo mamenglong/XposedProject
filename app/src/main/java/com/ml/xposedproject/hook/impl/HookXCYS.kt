@@ -1,6 +1,7 @@
 package com.ml.xposedproject.hook.impl
 
 import android.widget.Toast
+import com.google.auto.service.AutoService
 import com.ml.xposedproject.*
 import com.ml.xposedproject.hook.base.HookPackage
 import de.robv.android.xposed.XposedHelpers
@@ -15,6 +16,7 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage
  * Package: com.ml.xposedproject.hook
  * Project: XposedProject
  */
+@AutoService(HookPackage::class)
 class HookXCYS : HookPackage {
     override val label: String = "追风视频"
     override fun getPackage(): String {

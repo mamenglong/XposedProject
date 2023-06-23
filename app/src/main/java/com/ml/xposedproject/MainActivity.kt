@@ -83,7 +83,7 @@ class MainActivity : AppCompatActivity() {
                 val dataItem = list[position]
                 holder.binding.mSwitchCompat.apply {
                     text = dataItem.label
-                    setOnCheckedChangeListener { buttonView, isChecked ->
+                    setOnCheckedChangeListener { _, isChecked ->
                         if (isActive()) {
                             Config.setBool(this@MainActivity,dataItem.key, isChecked)
                         }else{

@@ -1,5 +1,6 @@
 package com.ml.xposedproject.hook.impl
 
+import com.google.auto.service.AutoService
 import com.ml.xposedproject.*
 import com.ml.xposedproject.hook.base.HookPackage
 import com.ml.xposedproject.test.TestFiled
@@ -17,6 +18,7 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage
  * Package: com.ml.xposedproject.hook
  * Project: XposedProject
  */
+@AutoService(HookPackage::class)
 class HookSelf : HookPackage {
     override val label: String = "self"
     override fun isEnableCurrentPackageHook(): Boolean {

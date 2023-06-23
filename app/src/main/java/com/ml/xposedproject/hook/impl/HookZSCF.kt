@@ -1,5 +1,6 @@
 package com.ml.xposedproject.hook.impl
 
+import com.google.auto.service.AutoService
 import com.ml.xposedproject.*
 import com.ml.xposedproject.hook.base.HookPackage
 import de.robv.android.xposed.callbacks.XC_LoadPackage
@@ -13,6 +14,7 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage
  * Package: com.ml.xposedproject.hook
  * Project: XposedProject
  */
+@AutoService(HookPackage::class)
 class HookZSCF : HookPackage {
     override val label: String = "芝士财富"
     override fun getPackage(): String {

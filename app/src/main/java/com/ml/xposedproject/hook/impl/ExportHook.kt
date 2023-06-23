@@ -1,5 +1,6 @@
 package com.ml.xposedproject.hook.impl
 
+import com.google.auto.service.AutoService
 import com.ml.xposedproject.hook.base.HookPackage
 import de.robv.android.xposed.callbacks.XC_LoadPackage
 
@@ -11,6 +12,7 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage
  * Package: com.ml.xposedproject.hook
  * Project: XposedProject
  */
+@AutoService(HookPackage::class)
 class ExportHook: HookPackage {
     override val label: String = "导出dex"
     override fun getPackage(): String {

@@ -5,6 +5,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.widget.Toast
+import com.google.auto.service.AutoService
 import com.ml.xposedproject.BuildConfig
 import com.ml.xposedproject.log
 import com.ml.xposedproject.provider.ConfigContentProvider

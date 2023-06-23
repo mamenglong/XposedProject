@@ -1,6 +1,7 @@
 package com.ml.xposedproject.hook.impl
 
 import android.content.Context
+import com.google.auto.service.AutoService
 import com.ml.xposedproject.*
 import com.ml.xposedproject.hook.base.HookPackage
 import de.robv.android.xposed.XposedHelpers
@@ -19,6 +20,7 @@ import de.robv.android.xposed.XC_MethodHook
  * Package: com.ml.xposedproject.hook
  * Project: XposedProject
  */
+@AutoService(HookPackage::class)
 class HookOnePlusMultiApp : HookPackage {
     override val label: String = "一加多开"
     override fun getPackage(): String {

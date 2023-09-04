@@ -2,8 +2,15 @@ pluginManagement {
     repositories {
         google()
         mavenCentral()
-        maven { url 'https://maven.aliyun.com/repository/public/' }
         gradlePluginPortal()
+    }
+    resolutionStrategy {
+        eachPlugin {
+            println(requested)
+            if (requested.id.id == "com.didi.drouter") {
+                useModule("io.github.didi:drouter-plugin:${requested.version}")
+            }
+        }
     }
 }
 dependencyResolutionManagement {
@@ -11,10 +18,8 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven { url 'https://maven.aliyun.com/repository/public/' }
-        maven { url 'https://jitpack.io' }
-
+        maven("https://api.xposed.info/")
     }
 }
-include ':app'
+include(":app")
 rootProject.name = "XposedProject"

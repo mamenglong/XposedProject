@@ -140,8 +140,8 @@ dependencies {
 
     implementation 'com.tencent:mmkv-static:1.2.16'
 
-    implementation "com.google.auto.service:auto-service:1.0-rc7"
-    annotationProcessor("com.google.auto.service:auto-service:1.0-rc7")
+    implementation "com.google.auto.service:auto-service:1.1.1"
+    annotationProcessor("com.google.auto.service:auto-service:1.1.1")
 }
 
 kapt {

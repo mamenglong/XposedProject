@@ -1,16 +1,11 @@
 package com.ml.xposedproject.hook.base
 
 import android.app.AndroidAppHelper
-import android.content.ComponentName
 import android.content.Context
-import android.content.Intent
+import android.content.pm.PackageManager
 import android.widget.Toast
-import com.google.auto.service.AutoService
-import com.ml.xposedproject.BuildConfig
 import com.ml.xposedproject.log
-import com.ml.xposedproject.provider.ConfigContentProvider
 import com.ml.xposedproject.registerMethodHookCallback
-import com.ml.xposedproject.service.AliveActivity
 import com.ml.xposedproject.tools.Config
 import de.robv.android.xposed.XposedHelpers
 import de.robv.android.xposed.callbacks.XC_LoadPackage
@@ -30,6 +25,21 @@ interface HookPackage : BaseHookMethod {
     val label: String
     val key: String
         get() = this.javaClass.simpleName
+
+    val versionCode: Long
+        get() {
+            return context!!.packageManager.getPackageInfo(
+                context!!.packageName,
+                PackageManager.PackageInfoFlags.of(0)
+            ).longVersionCode
+        }
+    val versionName: String
+        get() {
+            return context!!.packageManager.getPackageInfo(
+                context!!.packageName,
+                PackageManager.PackageInfoFlags.of(0)
+            ).versionName
+        }
 
     fun isCurrentPackage(loadPackageParam: XC_LoadPackage.LoadPackageParam): Boolean {
         val target = getPackage()
@@ -65,16 +75,19 @@ interface HookPackage : BaseHookMethod {
                     afterHookedMethod {
                         val app = it!!.thisObject as Context
                         val label = loadPackageParam.appInfo.loadLabel(app.packageManager)
-                        log("hookApplication($label) processName:${loadPackageParam.processName}" +
-                                " isFirstApplication:${loadPackageParam.isFirstApplication}",this@HookPackage)
-                      /*  if(ConfigContentProvider.isEnable.not()){
-                            val intent = Intent()
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                            intent.setComponent(ComponentName(BuildConfig.APPLICATION_ID,
-                                AliveActivity::class.java.name))
-                            app.startActivity(intent)
-                        }*/
-                        if (loadPackageParam.isFirstApplication&&loadPackageParam.processName==getPackage()) {
+                        log(
+                            "hookApplication($label) processName:${loadPackageParam.processName}" +
+                                    " isFirstApplication:${loadPackageParam.isFirstApplication}",
+                            this@HookPackage
+                        )
+                        /*  if(ConfigContentProvider.isEnable.not()){
+                              val intent = Intent()
+                              intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                              intent.setComponent(ComponentName(BuildConfig.APPLICATION_ID,
+                                  AliveActivity::class.java.name))
+                              app.startActivity(intent)
+                          }*/
+                        if (loadPackageParam.isFirstApplication && loadPackageParam.processName == getPackage()) {
                             Toast.makeText(
                                 app,
                                 "Enable:${isEnableCurrentPackageHook()} ${label}\t\n${loadPackageParam.packageName} ",

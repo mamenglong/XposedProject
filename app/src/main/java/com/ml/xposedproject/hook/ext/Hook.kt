@@ -24,7 +24,6 @@ fun registerMethodHookCallback(block: MethodHookCallback.() -> Unit): XC_MethodH
 fun interface ReplaceHookedMethod{
     /**
      * 替换函数
-     * @return null 不替换 else 替换
      */
     fun replaceHookedMethod(param: XC_MethodHook.MethodHookParam?): Any?
 }

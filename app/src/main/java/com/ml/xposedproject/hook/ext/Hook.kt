@@ -68,8 +68,3 @@ class MethodReplaceHookCallback: XC_MethodReplacement() {
     }
 
 }
-
-@Throws(ClassNotFoundException::class)
-fun XC_LoadPackage.LoadPackageParam.findClass(className:String): Class<*> {
-    return XposedHelpers.findClass(className,classLoader)
-}

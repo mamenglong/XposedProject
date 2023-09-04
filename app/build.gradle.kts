@@ -1,5 +1,7 @@
 import java.time.LocalDateTime
-import java.util.Random
+import java.time.ZoneOffset
+import java.util.Date
+import java.time.format.DateTimeFormatter
 
 plugins {
     alias(libs.plugins.androidApplication)
@@ -10,14 +12,14 @@ plugins {
     alias(libs.plugins.kotlinKapt)
     alias(libs.plugins.lsparanoid)
 }
-
 android {
     compileSdk = 33
     namespace = "com.ml.xposedproject"
     defaultConfig {
         applicationId = namespace
         versionName = "1.0"
-        versionCode = 1
+        minSdk = 24
+        versionCode = getVersionCode()
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "buildTime", "\"${buildTime()}\"")
     }
@@ -69,9 +71,14 @@ android {
         }
     }
 }
-
+fun getVersionCode(): Int {
+    val base = "2023-09-03 23:59:59"
+    val target = LocalDateTime.parse(base,DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+    return (LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"))- target.toEpochSecond(ZoneOffset.of("+8"))).toInt()
+}
 fun buildTime(): String {
-    val time = LocalDateTime.now().toString()
+    val dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+    val time = dtf.format(LocalDateTime.now())
     return time
 }
 dependencies {
@@ -85,7 +92,7 @@ dependencies {
     //https://api.xposed.info/reference/de/robv/android/xposed/XposedHelpers.html
     compileOnly(libs.xposed)
     //compileOnly 'de.robv.android.xposed:api:82:sources'
-    //compileOnly(name("api-82-sources") , ext("jar"))
+    compileOnly(files("libs/api-82-sources.jar"))
     //compileOnly(name: 'api-82', ext: 'jar')
 
     implementation(libs.google.protobuf.protoc)
@@ -105,14 +112,31 @@ kapt {
 hilt {
     enableAggregatingTask = true
 }
-protobuf {
-
-}
-lsparanoid{
+lsparanoid {
+    //https://github.com/LSPosed/LSParanoid
     seed = 1213
     includeDependencies = true
-    global = true
+    global = false
     variantFilter = {
         !it.name.contains("release")
+    }
+}
+protobuf {
+    //配置 protoc 编译器
+    protoc {
+        artifact = "com.google.protobuf:protoc:3.24.0"
+    }
+    //配置生成目录，编译后会在 build 的目录下生成对应的java文件
+    generateProtoTasks {
+        all().configureEach {
+//            builtins {
+//                remove(java)
+//            }
+            builtins {
+                create("java") {
+                    option("lite")
+                }
+            }
+        }
     }
 }

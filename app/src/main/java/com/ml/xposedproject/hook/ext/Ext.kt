@@ -1,4 +1,4 @@
-package com.ml.xposedproject.hook.base
+package com.ml.xposedproject.hook.ext
 
 import com.ml.xposedproject.log
 import com.ml.xposedproject.registerMethodHookCallback
@@ -10,8 +10,20 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage
 /**
  * load
  */
-fun XC_LoadPackage.LoadPackageParam.loadClass(cls: String,classLoader: ClassLoader = this.classLoader): Class<*>? {
-    return XposedHelpers.findClass(cls,classLoader)
+fun XC_LoadPackage.LoadPackageParam.findClass(
+    cls: String,
+    classLoader: ClassLoader = this.classLoader
+): Class<*>? {
+    return runCatching {
+        XposedHelpers.findClass(cls, classLoader)
+    }.fold(
+        onSuccess = {
+            it
+        }, onFailure = {
+            null
+        }
+    )
+
 }
 
 /**

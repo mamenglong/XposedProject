@@ -50,7 +50,7 @@ interface HookPackage : BaseHookMethod {
 
     fun isEnableCurrentPackageHook(): Boolean {
         log(
-            "isEnableCurrentPackageHook key:$key current:${AndroidAppHelper.currentPackageName()}  context:${context?.packageName}",
+            "isEnableCurrentPackageHook key:$key current:${AndroidAppHelper.currentPackageName()}  context:${context}:${context?.packageName}",
             this
         )
         val enable = context?.let { Config.getBool(it, key) } ?: false
@@ -68,7 +68,7 @@ interface HookPackage : BaseHookMethod {
     /**
      *
      */
-    private fun hookApplication(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
+    open fun hookApplication(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
         kotlin.runCatching {
             XposedHelpers.findAndHookMethod("android.app.Application",
                 loadPackageParam.classLoader, "onCreate", registerMethodHookCallback {
@@ -76,7 +76,8 @@ interface HookPackage : BaseHookMethod {
                         val app = it!!.thisObject as Context
                         val label = loadPackageParam.appInfo.loadLabel(app.packageManager)
                         log(
-                            "hookApplication($label) processName:${loadPackageParam.processName}" +
+                            "hookApplication($label) processName:${loadPackageParam.processName} " +
+                                    "packageName:${loadPackageParam.packageName}"+
                                     " isFirstApplication:${loadPackageParam.isFirstApplication}",
                             this@HookPackage
                         )
@@ -87,14 +88,19 @@ interface HookPackage : BaseHookMethod {
                                   AliveActivity::class.java.name))
                               app.startActivity(intent)
                           }*/
+                        val enable = isEnableCurrentPackageHook()
                         if (loadPackageParam.isFirstApplication && loadPackageParam.processName == getPackage()) {
                             Toast.makeText(
                                 app,
-                                "Enable:${isEnableCurrentPackageHook()} ${label}\t\n${loadPackageParam.packageName} ",
+                                buildString {
+                                    appendLine("Enable:${enable} ${label}")
+                                    appendLine(loadPackageParam.packageName)
+                                   // appendLine(loadPackageParam.processName)
+                                },
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
-                        if (isEnableCurrentPackageHook()) {
+                        if (enable) {
                             hookCurrentPackage(loadPackageParam)
                         }
                     }

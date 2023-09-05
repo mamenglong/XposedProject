@@ -27,11 +27,20 @@ fun XC_LoadPackage.LoadPackageParam.findClass(
     )
 }
 
+
 fun XC_LoadPackage.LoadPackageParam.hasClass(
     cls: String,
     classLoader: ClassLoader = this.classLoader
 ): Boolean {
     return findClass(cls) != null
+}
+fun XC_LoadPackage.LoadPackageParam.hookPrintClassMethod(
+    cls: String,
+    classLoader: ClassLoader = this.classLoader
+) {
+    findClass(cls,classLoader)?.declaredMethods?.forEach {
+        log("hookPrintClassMethod:${cls},method:$it",this)
+    }
 }
 
 /**

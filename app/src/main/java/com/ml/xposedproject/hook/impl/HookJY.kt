@@ -3,6 +3,7 @@ package com.ml.xposedproject.hook.impl
 import android.content.Context
 import android.content.SharedPreferences
 import com.google.auto.service.AutoService
+import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.ml.xposedproject.hook.base.HookPackage
 import com.ml.xposedproject.hook.base.PackageWithConfig
@@ -45,31 +46,19 @@ class HookJY : PackageWithConfig() {
             "com.lm.components.subscribe.config.UserVipInfo",
             "isVipUser", true
         )
-        val config = mConfig
-        if (config == null) {
-            showToast("首次使用,配置初始化ing...")
-            init(loadPackageParam)
-            return
-        }
-        log("config:$config",this)
-        val jsonObject =
-            JsonParser.parseString(config).asJsonObject
-        if (isCurrentVersion(jsonObject)) {
-            showToast("检测到版本改变,自适配中...")
-            init(loadPackageParam)
-        } else {
-            val list = jsonObject.get("list").asJsonArray
-            list.forEach {
-                val ob = it.asJsonObject
-                val cls = ob.get("class").asString
-                val me = ob.get("method").asString
-                loadPackageParam.hookAndReplaceMethod(cls,me,true)
-            }
-        }
-
     }
 
-    private fun init(loadPackageParam: LoadPackageParam) {
+    override fun exec(loadPackageParam: LoadPackageParam, jsonObject: JsonObject) {
+        val list = jsonObject.get("list").asJsonArray
+        list.forEach {
+            val ob = it.asJsonObject
+            val cls = ob.get("class").asString
+            val me = ob.get("method").asString
+            loadPackageParam.hookAndReplaceMethod(cls,me,true)
+        }
+        showToast("适配完成")
+    }
+    override fun init(loadPackageParam: LoadPackageParam) {
         val list = JSONArray()
         for (str in getClassNames(context!!)) {
             for (field in loadPackageParam.findClass(str)!!.declaredFields) {

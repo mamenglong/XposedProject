@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">XposedProject</string>
+    <string-array name="scope">
+        <item>com.xt.retouch</item>
+        <item>com.lemon.lv</item>
+        <item>com.vmos.pro</item>
+        <item>com.ml.xposedproject</item>
+    </string-array>
 </resources>

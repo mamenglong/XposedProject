@@ -11,22 +11,22 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:theme="@style/AppTheme.Tran"
             android:name=".service.AliveActivity"
             android:enabled="true"
-            android:exported="true" />
+            android:exported="true"
+            android:theme="@style/AppTheme.Tran" />
 
         <provider
-            android:multiprocess="true"
             android:name=".provider.ConfigContentProvider"
-            android:process=":xp"
             android:authorities="${applicationId}.provider.ConfigContentProvider"
             android:enabled="true"
-            android:exported="true" />
+            android:exported="true"
+            android:multiprocess="true"
+            android:process=":xp" />
 
         <activity
-            android:exported="true"
-            android:name=".MainActivity">
+            android:name=".MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -42,6 +42,10 @@
         <meta-data
             android:name="xposeddescription"
             android:value="xposed插件开发测试" />
+        <meta-data
+            android:name="xposedscope"
+            android:resource="@array/scope" />
+
     </application>
 
 </manifest>

@@ -5,14 +5,13 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.marginLeft
 import androidx.core.view.marginRight
 import androidx.recyclerview.widget.RecyclerView
 import com.ml.xposedproject.databinding.ActivityMainBinding
 import com.ml.xposedproject.databinding.ItemHookListBinding
-import com.ml.xposedproject.hook.HookFactory
+import com.ml.xposedproject.hook.active.HookFactory
 import com.ml.xposedproject.taichi.TaiChiUtil
 import com.ml.xposedproject.test.TestFiled
 import com.ml.xposedproject.test.TestObject

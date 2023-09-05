@@ -1,15 +1,10 @@
-package com.ml.xposedproject.hook.impl
+package com.ml.xposedproject.hook.active.impl
 
-import android.app.Activity
 import android.os.Bundle
-import android.util.Pair
 import com.google.auto.service.AutoService
-import com.ml.xposedproject.hook.base.HookPackage
+import com.ml.xposedproject.hook.active.base.HookPackage
 import com.ml.xposedproject.log
 import com.ml.xposedproject.registerMethodHookCallback
-import com.ml.xposedproject.registerMethodReplaceHookCallback
-import com.ml.xposedproject.showToast
-import de.robv.android.xposed.XC_MethodReplacement
 import de.robv.android.xposed.XposedHelpers
 import de.robv.android.xposed.callbacks.XC_LoadPackage
 
@@ -22,35 +17,17 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage
  * Project: XposedProject
  */
 @AutoService(HookPackage::class)
-class HookGreen : HookPackage {
-    override val label: String = "绿巨人"
+class HookDy : HookPackage {
+    override val label: String = "抖音"
     override fun getPackage(): String {
-        return "us.ljj.vip78"
+        return "com.ss.android.ugc.aweme"
     }
 
     override fun hookCurrentPackage(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
         log("hookPackage:${loadPackageParam.packageName}", this)
-        hookUserInfo(loadPackageParam)
-        //removeAd(loadPackageParam)
-    }
-
-    private fun hookUserInfo(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
-        hookAndReplaceMethod(loadPackageParam,
-            "com.hex.wanshiwu.v2.repository.AccountRepo",
-            "b",
-            Pair(true,"2023-02-11 18:54:27")
-            )
-        hookAndReplaceMethod(loadPackageParam,
-            "com.hex.wanshiwu.util.RouterUtil",
-            "f",
-            true,
-            String::class.java
-        )
-        hookAndReplaceMethod(loadPackageParam,
-            "com.hex.wanshiwu.util.RouterUtil",
-            "i",
-            true,
-        )
+        // hookUserInfo(loadPackageParam)
+        //hookLog(loadPackageParam)
+        removeAd(loadPackageParam)
     }
 
     private fun removeAd(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
@@ -62,7 +39,7 @@ class HookGreen : HookPackage {
                 "onCreate",
                 registerMethodHookCallback {
                     afterHookedMethod {
-                        log("SplashAdActivity onCreate ${it?.thisObject}", this@HookGreen)
+                        log("SplashAdActivity onCreate ${it?.thisObject}", this@HookDy)
                         XposedHelpers.setBooleanField(it?.thisObject, "mDirectlyGoMain", true)
                         XposedHelpers.callMethod(it?.thisObject, "finish")
                     }

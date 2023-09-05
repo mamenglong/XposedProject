@@ -1,12 +1,10 @@
-package com.ml.xposedproject.hook.impl
+package com.ml.xposedproject.hook.active.impl
 
 import com.google.auto.service.AutoService
 import com.ml.xposedproject.*
-import com.ml.xposedproject.hook.base.HookPackage
+import com.ml.xposedproject.hook.active.base.HookPackage
 import com.ml.xposedproject.test.TestFiled
 import com.ml.xposedproject.test.TestObject
-import com.ml.xposedproject.tools.Config
-import de.robv.android.xposed.XSharedPreferences
 import de.robv.android.xposed.XposedHelpers
 import de.robv.android.xposed.callbacks.XC_LoadPackage
 

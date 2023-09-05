@@ -6,10 +6,7 @@ import android.database.Cursor
 import android.net.Uri
 import android.util.Log
 import com.ml.xposedproject.BuildConfig
-import com.ml.xposedproject.hook.base.HookPackage
-import com.ml.xposedproject.service.AliveActivity
 import com.tencent.mmkv.MMKV
-import java.util.Collection
 
 class ConfigContentProvider : ContentProvider() {
     private lateinit var kv: MMKV

@@ -1,8 +1,8 @@
-package com.ml.xposedproject.hook.impl
+package com.ml.xposedproject.hook.active.impl
 
 import androidx.core.app.NotificationCompat
 import com.google.auto.service.AutoService
-import com.ml.xposedproject.hook.base.HookPackage
+import com.ml.xposedproject.hook.active.base.HookPackage
 import com.ml.xposedproject.hook.ext.findAndHookMethod
 import com.ml.xposedproject.hook.ext.findClass
 import com.ml.xposedproject.log

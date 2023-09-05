@@ -4,8 +4,10 @@ import com.ml.xposedproject.log
 import com.ml.xposedproject.registerMethodHookCallback
 import com.ml.xposedproject.registerMethodReplaceHookCallback
 import de.robv.android.xposed.XC_MethodHook
+import de.robv.android.xposed.XposedBridge
 import de.robv.android.xposed.XposedHelpers
 import de.robv.android.xposed.callbacks.XC_LoadPackage
+import java.lang.reflect.Method
 
 /**
  * load
@@ -23,7 +25,13 @@ fun XC_LoadPackage.LoadPackageParam.findClass(
             null
         }
     )
+}
 
+fun XC_LoadPackage.LoadPackageParam.hasClass(
+    cls: String,
+    classLoader: ClassLoader = this.classLoader
+): Boolean {
+    return findClass(cls) != null
 }
 
 /**
@@ -180,6 +188,24 @@ fun XC_LoadPackage.LoadPackageParam.findAndHookMethod(
     }
 }
 
+fun XC_LoadPackage.LoadPackageParam.hookAndReplaceMethod(method: Method, newValue: Any?) {
+    runCatching {
+        XposedBridge.hookMethod(method, registerMethodReplaceHookCallback {
+            replaceHookedMethod {
+                return@replaceHookedMethod newValue
+            }
+        })
+        log(
+            "hookAndReplaceMethod onSuccess ${method.declaringClass.name}.${method.name}",
+            this
+        )
+    }.onFailure {
+        log(
+            "hookAndReplaceMethod onFailure ${method.declaringClass.name}.${method.name} ->:${it.message}",
+            this
+        )
+    }
+}
 
 fun XC_LoadPackage.LoadPackageParam.setObjectField(
     className: String,

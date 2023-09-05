@@ -1,12 +1,10 @@
-package com.ml.xposedproject.hook.impl
+package com.ml.xposedproject.hook.active.impl
 
 import android.content.Context
-import android.content.SharedPreferences
 import com.google.auto.service.AutoService
 import com.google.gson.JsonObject
-import com.google.gson.JsonParser
-import com.ml.xposedproject.hook.base.HookPackage
-import com.ml.xposedproject.hook.base.PackageWithConfig
+import com.ml.xposedproject.hook.active.base.HookPackage
+import com.ml.xposedproject.hook.active.base.PackageWithConfig
 import com.ml.xposedproject.hook.ext.findClass
 import com.ml.xposedproject.hook.ext.hookAndReplaceMethod
 import com.ml.xposedproject.log

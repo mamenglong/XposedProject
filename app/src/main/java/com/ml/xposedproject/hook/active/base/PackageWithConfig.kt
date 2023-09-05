@@ -1,4 +1,4 @@
-package com.ml.xposedproject.hook.base
+package com.ml.xposedproject.hook.active.base
 
 import android.content.SharedPreferences
 import com.google.gson.JsonObject

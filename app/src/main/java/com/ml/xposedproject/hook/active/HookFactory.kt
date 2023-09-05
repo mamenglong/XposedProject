@@ -1,8 +1,8 @@
-package com.ml.xposedproject.hook
+package com.ml.xposedproject.hook.active
 
 import com.ml.xposedproject.DataItem
-import com.ml.xposedproject.hook.base.HookPackage
-import com.ml.xposedproject.hook.impl.*
+import com.ml.xposedproject.hook.active.base.HookPackage
+import com.ml.xposedproject.hook.active.impl.HookSelf
 import com.ml.xposedproject.log
 import de.robv.android.xposed.callbacks.XC_LoadPackage
 import java.util.ServiceLoader
@@ -17,10 +17,10 @@ import java.util.ServiceLoader
  */
 object HookFactory {
     private val hookList = mutableListOf<HookPackage>()
-    private val mapHook = mutableMapOf<String,HookPackage>()
+    private val mapHook = mutableMapOf<String, HookPackage>()
 
     init {
-        ServiceLoader.load(HookPackage::class.java,HookFactory::class.java.classLoader).let {
+        ServiceLoader.load(HookPackage::class.java, HookFactory::class.java.classLoader).let {
             it.forEach {
                 hookList.add(it)
             }

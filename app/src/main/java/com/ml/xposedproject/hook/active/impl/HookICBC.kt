@@ -1,12 +1,10 @@
-package com.ml.xposedproject.hook.impl
+package com.ml.xposedproject.hook.active.impl
 
 import android.content.Context
-import android.content.pm.PackageInfo
 import com.google.auto.service.AutoService
 import com.ml.xposedproject.*
-import com.ml.xposedproject.hook.base.HookPackage
+import com.ml.xposedproject.hook.active.base.HookPackage
 import de.robv.android.xposed.callbacks.XC_LoadPackage
-import java.util.ArrayList
 
 /**
  * Author: Menglong Ma

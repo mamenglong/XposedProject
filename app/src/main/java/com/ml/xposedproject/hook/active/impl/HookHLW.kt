@@ -1,9 +1,9 @@
-package com.ml.xposedproject.hook.impl
+package com.ml.xposedproject.hook.active.impl
 
 import android.widget.Toast
 import com.google.auto.service.AutoService
 import com.ml.xposedproject.*
-import com.ml.xposedproject.hook.base.HookPackage
+import com.ml.xposedproject.hook.active.base.HookPackage
 import de.robv.android.xposed.XposedHelpers
 import de.robv.android.xposed.callbacks.XC_LoadPackage
 import java.lang.reflect.Array

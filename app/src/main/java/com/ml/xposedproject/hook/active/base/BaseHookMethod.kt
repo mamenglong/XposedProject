@@ -1,9 +1,8 @@
-package com.ml.xposedproject.hook.base
+package com.ml.xposedproject.hook.active.base
 
 import com.ml.xposedproject.log
 import com.ml.xposedproject.registerMethodHookCallback
 import com.ml.xposedproject.registerMethodReplaceHookCallback
-import de.robv.android.xposed.IXposedHookLoadPackage
 import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XposedHelpers
 import de.robv.android.xposed.callbacks.XC_LoadPackage

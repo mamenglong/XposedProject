@@ -1,8 +1,8 @@
-package com.ml.xposedproject.hook.impl
+package com.ml.xposedproject.hook.active.impl
 
 import android.widget.Toast
 import com.google.auto.service.AutoService
-import com.ml.xposedproject.hook.base.HookPackage
+import com.ml.xposedproject.hook.active.base.HookPackage
 import com.ml.xposedproject.log
 import com.ml.xposedproject.registerMethodHookCallback
 import de.robv.android.xposed.XposedHelpers

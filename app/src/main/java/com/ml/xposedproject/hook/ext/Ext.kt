@@ -191,7 +191,7 @@ fun XC_LoadPackage.LoadPackageParam.findAndHookMethod(
         log("findAndHookMethod onSuccess $className.$methodName", this)
     }.onFailure {
         log(
-            "findAndHookMethod onFailure $className.$methodName ->:${it.message}",
+            "findAndHookMethod onFailure $className.$methodName ->${it}",
             this
         )
     }
@@ -200,18 +200,23 @@ fun XC_LoadPackage.LoadPackageParam.findAndHookMethod(
 fun XC_LoadPackage.LoadPackageParam.hookAndReplaceMethod(method: Method, newValue: Any?) {
     runCatching {
         XposedBridge.hookMethod(method, registerMethodReplaceHookCallback {
-            replaceHookedMethod {
-                return@replaceHookedMethod newValue
+            replaceHookedMethod {p->
+                return@replaceHookedMethod newValue.also {
+                    log(
+                        "hookAndReplaceMethod exec ${method.declaringClass.name}.${method.name},old:${p?.result},new:$it",
+                        this@hookAndReplaceMethod
+                    )
+                }
             }
         })
         log(
             "hookAndReplaceMethod onSuccess ${method.declaringClass.name}.${method.name}",
-            this
+            this@hookAndReplaceMethod
         )
     }.onFailure {
         log(
             "hookAndReplaceMethod onFailure ${method.declaringClass.name}.${method.name} ->:${it.message}",
-            this
+            this@hookAndReplaceMethod
         )
     }
 }

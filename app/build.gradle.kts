@@ -104,6 +104,8 @@ dependencies {
     implementation(libs.tencent.mmkv)
     implementation(libs.google.auto.service)
     annotationProcessor(libs.google.auto.service)
+    //https://luckypray.org/DexKit/zh-cn/guide/example.html#%E5%A4%9A%E6%9D%A1%E4%BB%B6%E5%8C%B9%E9%85%8D%E7%B1%BB%E5%A4%9A%E6%9D%A1%E4%BB%B6%E7%94%A8%E6%B3%95%E7%A4%BA%E4%BE%8B%E3%80%82
+    implementation(libs.dexkit)
 }
 
 kapt {

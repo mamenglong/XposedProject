@@ -19,7 +19,7 @@ abstract class PackageWithConfig : HookPackage {
         get() = mSharedPreferences.getString("config", null)
     override fun hookCurrentPackage(loadPackageParam: XC_LoadPackage.LoadPackageParam) {
         log(
-            "hookPackage processName:${loadPackageParam.processName},packageName:${loadPackageParam.packageName}",
+            "hookCurrentPackage processName:${loadPackageParam.processName},packageName:${loadPackageParam.packageName}",
             this
         )
         if (loadPackageParam.processName != getPackage() || loadPackageParam.appInfo.loadLabel(context!!.packageManager)!= label) {
@@ -43,13 +43,14 @@ abstract class PackageWithConfig : HookPackage {
         }
     }
 
-    protected fun saveConfig(block: (JSONObject) -> Unit) {
+    protected fun saveConfig(block: (JSONObject) -> Unit):JsonObject {
         val jSONObject = JSONObject()
         jSONObject.put("versionCode", versionCode)
         jSONObject.put("versionName", versionName)
         block.invoke(jSONObject)
         mSharedPreferences.edit()
             .putString("config", jSONObject.toString()).apply()
+        return JsonParser.parseString(jSONObject.toString()).asJsonObject
     }
 
     protected fun isCurrentVersion(jsonObject: JsonObject): Boolean {

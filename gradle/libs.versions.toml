@@ -1,5 +1,5 @@
 [versions]
-agp = "8.3.0-alpha01"
+agp = "8.1.0"
 kotlin = "1.9.0"
 kotlinxCoroutines = "1.6.4"
 kotlinxDatetime = "0.4.0"
@@ -75,7 +75,7 @@ kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-pl
 ksp-gradlePlugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 xposed = { group = "de.robv.android.xposed", name = "api", version = "82" }
 tencent-mmkv = { group = "com.tencent", name = "mmkv-static", version = "1.2.16" }
-
+dexkit = {group = "org.luckypray",name="dexkit",version="2.0.0-rc7"}
 [bundles]
 retrofit2 = ["squareup-retrofit2", "squareup-okhttp3", "google-gson", "squareup-okhttp3-logging", "squareup-retrofit2-converter-gson"]
 

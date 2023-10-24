@@ -20,5 +20,8 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
 
     companion object {
         private const val modulePackageName = BuildConfig.APPLICATION_ID
+        init {
+            System.loadLibrary("dexkit")
+        }
     }
 }

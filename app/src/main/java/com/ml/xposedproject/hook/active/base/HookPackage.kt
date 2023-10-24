@@ -53,7 +53,14 @@ interface HookPackage : BaseHookMethod {
             "isEnableCurrentPackageHook key:$key current:${AndroidAppHelper.currentPackageName()}  context:${context}:${context?.packageName}",
             this
         )
-        val enable = context?.let { Config.getBool(it, key) } ?: false
+        val enable = runCatching {
+            context?.let { Config.getBool(it, key) } ?: false
+        }.fold(onFailure = {
+            it.printStackTrace()
+            false
+        }, onSuccess = {
+            it
+        })
         log("isEnableCurrentPackageHook key:$key enable:$enable", this)
         return enable
     }
@@ -77,7 +84,7 @@ interface HookPackage : BaseHookMethod {
                         val label = loadPackageParam.appInfo.loadLabel(app.packageManager)
                         log(
                             "hookApplication($label) processName:${loadPackageParam.processName} " +
-                                    "packageName:${loadPackageParam.packageName}"+
+                                    "packageName:${loadPackageParam.packageName}" +
                                     " isFirstApplication:${loadPackageParam.isFirstApplication}",
                             this@HookPackage
                         )
@@ -95,7 +102,7 @@ interface HookPackage : BaseHookMethod {
                                 buildString {
                                     appendLine("Enable:${enable} ${label}")
                                     appendLine(loadPackageParam.packageName)
-                                   // appendLine(loadPackageParam.processName)
+                                    // appendLine(loadPackageParam.processName)
                                 },
                                 Toast.LENGTH_SHORT
                             ).show()

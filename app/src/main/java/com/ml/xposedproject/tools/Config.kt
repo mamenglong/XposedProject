@@ -1,9 +1,11 @@
 package com.ml.xposedproject.tools
 
+import android.app.AndroidAppHelper
 import android.content.ContentValues
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Process
+import android.provider.Settings
 import android.util.Log
 import androidx.core.content.edit
 import com.ml.xposedproject.BuildConfig

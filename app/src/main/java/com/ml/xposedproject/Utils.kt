@@ -2,11 +2,9 @@ package com.ml.xposedproject
 
 import android.app.AndroidAppHelper
 import android.content.Context
-import android.util.Log
 import android.widget.Toast
-import de.robv.android.xposed.XC_MethodHook
-import de.robv.android.xposed.XC_MethodReplacement
 import de.robv.android.xposed.XposedBridge
+import java.io.File
 
 /**
  * Author: Menglong Ma
@@ -33,4 +31,23 @@ fun taichi(block:()->Unit):Boolean{
         block.invoke()
     }
     return BuildConfig.FLAVOR=="taichi"
+}
+
+fun randomString(length: Int): String {
+    val str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+    val random = java.util.Random()
+    val sb = StringBuffer()
+    for (i in 0 until length) {
+        val number = random.nextInt(62)
+        sb.append(str[number])
+    }
+    return sb.toString()
+}
+fun Context.clearData() {
+    val file = File(cacheDir.getParent())
+    if (file.exists()) {
+        file.listFiles().forEach {
+            it.deleteRecursively()
+        }
+    }
 }
